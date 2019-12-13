@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class CountState with ChangeNotifier {
@@ -207,10 +207,10 @@ class VsVM with ChangeNotifier {
   Future download() async {
     progress = 0.0;
     _appendLine("CheckPermission");
-    var granted = await checkPermission();
+    // var granted = await checkPermission();
 
-    _appendLine(
-        "PermssionStatus: ${granted ? 'Permission Granted' : 'permission Denied'}");
+    // _appendLine(
+    //     "PermssionStatus: ${granted ? 'Permission Granted' : 'permission Denied'}");
     var dio = Dio();
     Response<String> response = await dio.get<String>(
         "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt",
@@ -274,27 +274,27 @@ class VsVM with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> checkPermission() async {
-    PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.storage);
-    var granted = permission.value == PermissionStatus.granted.value;
-    if (granted) {
-      return granted;
-    }
+  // Future<bool> checkPermission() async {
+  //   PermissionStatus permission = await PermissionHandler()
+  //       .checkPermissionStatus(PermissionGroup.storage);
+  //   var granted = permission.value == PermissionStatus.granted.value;
+  //   if (granted) {
+  //     return granted;
+  //   }
 
-    Map<PermissionGroup, PermissionStatus> permission2 =
-        await PermissionHandler().requestPermissions([PermissionGroup.storage]);
-    var denied = StringBuffer();
-    permission2.forEach((PermissionGroup key, PermissionStatus value) {
-      var granted = value.value == PermissionStatus.granted.value;
+  //   Map<PermissionGroup, PermissionStatus> permission2 =
+  //       await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+  //   var denied = StringBuffer();
+  //   permission2.forEach((PermissionGroup key, PermissionStatus value) {
+  //     var granted = value.value == PermissionStatus.granted.value;
 
-      if (!granted) {
-        denied.write("${key.toString()}  === ${value.toString()}");
-      }
-    });
-    print(denied);
-    return granted;
-  }
+  //     if (!granted) {
+  //       denied.write("${key.toString()}  === ${value.toString()}");
+  //     }
+  //   });
+  //   print(denied);
+  //   return granted;
+  // }
 
   void _setStatus(String value) {
     this.status = value;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:test1/auth2.dart';
 import 'package:test1/list.dart';
 import 'package:test1/main.dart';
+import 'package:test1/thread.dart';
 import 'package:test1/vs.dart';
 
 class LoginPage extends StatelessWidget {
@@ -36,10 +38,18 @@ class LoginPage extends StatelessWidget {
             },
           ),
           RaisedButton(
-            child: Text("toVs"),
+            child: Text("toThreading"),
             onPressed: () {
               print("flatbutton");
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>VsTtPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> ThreadPage()));
+            },
+          ),
+
+          RaisedButton(
+            child: Text("ViewPager"),
+            onPressed: () {
+              print("flatbutton");
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Auth()));
             },
           ),
           RaisedButton(
