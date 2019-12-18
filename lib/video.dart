@@ -76,40 +76,51 @@ class _PlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Consumer<_Initial>(
-          builder: (context, value, child) {
-            return value.initialized
-                ? AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
-                  )
-                : CircularProgressIndicator();
-          },
-        ),
-        Consumer<_PlayStatus>(
-          builder: (context, value, child) {
-            return IconButton(
-              icon: Icon(value._status == PlayStatus.PLAYING
-                  ? Icons.pause
-                  : Icons.play_arrow),
-              onPressed:()=> playOrPause(value),
-            );
-          },
-        ),
-        VideoProgressIndicator(
-          _controller,
-          allowScrubbing: true,
-        ),
-        Consumer<_PlayProgress>(
-          builder: (context, value, child) {
-            return Text(
-                "${_printDuration(value._position)}/${_printDuration(value._total)}");
-          },
-        ),
-      ],
+    return Container(
+      color: Colors.blueAccent,
+      child: Stack(
+        children: <Widget>[
+          Consumer<_Initial>(
+            builder: (context, value, child) {
+              return value.initialized
+                  ? AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    )
+                  : CircularProgressIndicator();
+            },
+          ),
+          Positioned(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(children: [
+                Flexible(flex: 1, child: VideoProgressIndicator( _controller, allowScrubbing: true,)),
+
+                Consumer<_PlayStatus>(
+                  builder: (context, value, child) {
+                    return IconButton(
+                      icon: Icon(value._status == PlayStatus.PLAYING
+                          ? Icons.pause
+                          : Icons.play_arrow),
+                      onPressed: () => playOrPause(value),
+                    );
+                  },
+                ),
+              ],
+              crossAxisAlignment: CrossAxisAlignment.center,
+              ),
+            ),
+            bottom: 0,
+            left: 0,
+            right: 0,
+          ),
+        ],
+        alignment: AlignmentDirectional.center,
+      ),
+      width: double.infinity,
+      height: 300,
     );
+
   }
 
   String _printDuration(Duration duration) {
@@ -127,7 +138,7 @@ class _PlayView extends StatelessWidget {
     if (_controller.value.isPlaying) {
       await _controller.pause();
     } else {
-      if(st._status == PlayStatus.COMPLETED){
+      if (st._status == PlayStatus.COMPLETED) {
         await _controller.seekTo(Duration());
       }
       await _controller.play();
