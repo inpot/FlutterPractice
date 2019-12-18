@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,17 @@ class Auth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Auth 2.0 Sample"),
+          title: Text("CachedImage,TabBar"),
+          actions: <Widget>[
+            PopupMenuButton(itemBuilder:(context){
+              var result = List<PopupMenuEntry>();
+              result.add(PopupMenuItem(child: IconButton(icon: Icon(Icons.category,),onPressed: ()=>print("click"),), ));
+              return result;
+
+
+            } ,)
+
+          ],
         ),
         body: MultiProvider(
           providers: [
@@ -104,37 +115,43 @@ class _Body extends StatelessWidget {
         if (item.images.length > 0) {
           imgUrl = item.images[0];
         } else {
-          if(item.url.endsWith("jpg")){
-              imgUrl = item.url; 
-          }else{
-          imgUrl = "https://rs.0.gaoshouyou.com/32/f5/0c/37f57551e20c6d1cbc4d64569048a27f.jpeg";
-
+          if (item.url.endsWith("jpg")) {
+            imgUrl = item.url;
+          } else {
+            imgUrl =
+                "https://rs.0.gaoshouyou.com/32/f5/0c/37f57551e20c6d1cbc4d64569048a27f.jpeg";
           }
-
         }
 
         return ListTile(
-          title: Text(item.desc),
-          subtitle: Text("${item.type}\n${item.url}"),
+          title: Text(
+            item.desc,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text(
+            "${item.url}",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
           leading: ClipOval(
-            child: 
-            Image.network(
-            imgUrl,
-            fit: BoxFit.fill,
-            width: 60,
-            height: 60,
+            child: CachedNetworkImage(
+              imageUrl: imgUrl,
+              fit: BoxFit.fill,
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              width: 60,
+              height: 60,
+            ),
           ),
-          ),
-          onTap:() async =>{
-             if (await canLaunch(item.url)) {
-                 await launch(item.url)
-             } else {
-                 throw 'Could not launch ${item.url}'
-             }
-          } ,
+          onTap: () async => {
+            if (await canLaunch(item.url))
+              {await launch(item.url)}
+            else
+              {throw 'Could not launch ${item.url}'}
+          },
         );
       },
-      
     );
   }
 
@@ -153,7 +170,7 @@ class GankVm with ChangeNotifier {
   get loading => _loading;
   GankToday gankToday;
 
-  void loadData() async {
+  Future loadData() async {
     var dio = Dio();
     var respons = await dio.get<String>("http://gank.io/api/today");
     gankToday = GankToday.fromJson(respons.data);
