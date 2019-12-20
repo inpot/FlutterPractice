@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -79,9 +80,13 @@ class _ListBody extends StatelessWidget {
           } else {
             User item = vm.datas[index];
             return ListTile(
-              leading:  ClipOval(
-                  child: Image.network(item.icon,fit:BoxFit.cover ,width: 60,height: 60,),
-              ),
+               leading: 
+               SizedBox(child: 
+              CircleAvatar(backgroundImage: CachedNetworkImageProvider(item.icon,), child: Text("aaaa"),),
+              width: 60,
+              height: 60,
+               ),
+               //ClipOval( child: CachedNetworkImage(imageUrl: item.icon,width: 60,height: 60,fit: BoxFit.cover,) ,
               title: Text("${item.id} ${item.name}"),
               subtitle: Text("${item.addr}"),
             );

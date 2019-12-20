@@ -77,7 +77,7 @@ class _PlayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blueAccent,
+      color: Colors.black,
       child: Stack(
         children: <Widget>[
           Consumer<_Initial>(
@@ -101,7 +101,7 @@ class _PlayView extends StatelessWidget {
                     return IconButton(
                       icon: Icon(value._status == PlayStatus.PLAYING
                           ? Icons.pause
-                          : Icons.play_arrow),
+                          : Icons.play_arrow,color: Colors.white,),
                       onPressed: () => playOrPause(value),
                     );
                   },

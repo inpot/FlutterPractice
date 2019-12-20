@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test1/auth2.dart';
 import 'package:test1/list.dart';
 import 'package:test1/main.dart';
+import 'package:test1/svg.dart';
 import 'package:test1/thread.dart';
 import 'package:test1/video.dart';
 import 'package:test1/vs.dart';
@@ -58,6 +59,14 @@ class LoginPage extends StatelessWidget {
             onPressed: () {
               print("flatbutton");
               Navigator.push(context, MaterialPageRoute(builder: (context)=>Auth()));
+            },
+          ),
+          RaisedButton(
+            child: Text("SVG"),
+            onPressed: () {
+              print("flatbutton");
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SvgPage()));
+
             },
           ),
           RaisedButton(
