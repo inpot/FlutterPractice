@@ -1,11 +1,12 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:test1/list.dart';
 
 abstract class BaseListVm<T> with ChangeNotifier{
 
   List<T> datas = List<T>();
-  ListStatus status;
+  ListStatus status = ListStatus.IDLE;
   bool hasMore = true;
   int ids = 0;
   int page = 0;
@@ -13,7 +14,8 @@ abstract class BaseListVm<T> with ChangeNotifier{
   bool refreshing = false;
 
 
-  void load(int page) async {
+  load(int page) async {
+
     if (this.page == page && status == ListStatus.LOADING) {
       return;
     }
@@ -43,7 +45,7 @@ abstract class BaseListVm<T> with ChangeNotifier{
   Future refresh() async {
     hasMore = true;
     refreshing = true;
-    load(page);
+    await load(page);
   }
 
 

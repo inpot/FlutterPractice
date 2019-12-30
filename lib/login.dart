@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:test1/auth2.dart';
 import 'package:test1/list.dart';
@@ -6,6 +9,7 @@ import 'package:test1/svg.dart';
 import 'package:test1/thread.dart';
 import 'package:test1/video.dart';
 import 'package:test1/vs.dart';
+import 'package:test1/widgets.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -20,7 +24,12 @@ class LoginPage extends StatelessWidget {
           Text("Login"),
           FlatButton(
             child: Text("FlatButton"),
-            onPressed: () => print("flatbutton"),
+            onPressed: () {
+                var bytes = utf8.encode("input");
+                var encoded = sha256.convert(bytes);
+                print("encode : $encoded");
+
+            },
             color: Colors.blue,
             colorBrightness: Brightness.light,
             splashColor: Colors.indigo,
@@ -63,10 +72,21 @@ class LoginPage extends StatelessWidget {
           ),
           RaisedButton(
             child: Text("SVG"),
+            onPressed: () async {
+              print("flatbutton");
+
+  final String assetName = 'assets/lizard.svg';
+       var svg = await DefaultAssetBundle.of(context).load(assetName);
+         var data = svg.buffer.asUint8List();
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SvgPage(svgData: data,)));
+
+            },
+          ),
+          RaisedButton(
+            child: Text("Widgets"),
             onPressed: () {
               print("flatbutton");
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>SvgPage()));
-
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>WidgetsPage()));
             },
           ),
           RaisedButton(
