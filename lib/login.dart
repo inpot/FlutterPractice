@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:test1/auth2.dart';
 import 'package:test1/list.dart';
@@ -10,6 +11,7 @@ import 'package:test1/thread.dart';
 import 'package:test1/video.dart';
 import 'package:test1/vs.dart';
 import 'package:test1/widgets.dart';
+import 'package:toast/toast.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -18,10 +20,10 @@ class LoginPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Login"),
       ),
-      body: Center(
-          child: Column(
+      body: Wrap(
+        alignment: WrapAlignment.spaceAround,
+        runAlignment: WrapAlignment.start,
         children: <Widget>[
-          Text("Login"),
           FlatButton(
             child: Text("FlatButton"),
             onPressed: () {
@@ -105,8 +107,15 @@ class LoginPage extends StatelessWidget {
                   (route) => false)
             },
           ),
+          CupertinoButton(child: Text("Cupertino"), onPressed: ()=>print("Cupertino click"), color: Colors.green),
+          RaisedButton(child: Text("ShowToast"), onPressed: (){
+ 
+             // var toast = Toast();
+             Toast.show("msg from toast", context);
+
+          },)
         ],
-      )),
+      ),
     );
   }
 }
