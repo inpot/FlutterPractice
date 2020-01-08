@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:test1/login.dart';
 import 'package:test1/main.dart';
 import 'package:test1/regist.dart';
+import 'package:toast/toast.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -13,6 +15,9 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   int current = 5;
   var watting = 3;
+
+final Connectivity _connectivity = Connectivity();
+  StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +74,14 @@ print("return result $res");
   @override
   void dispose() {
     timer.cancel();
+    _connectivitySubscription.cancel();
     super.dispose();
   }
 
+  void onChange(ConnectivityResult result){
+        Toast.show("Connectivity Change $result", context); 
+  }
+  
   Timer timer;
   @override
   void initState() {
@@ -85,6 +95,7 @@ print("return result $res");
       });
     });
 
+    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(onChange);
     super.initState();
   }
 }

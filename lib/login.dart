@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ import 'package:test1/widgets.dart';
 import 'package:toast/toast.dart';
 
 class LoginPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,16 +111,16 @@ class LoginPage extends StatelessWidget {
             },
           ),
           CupertinoButton(child: Text("Cupertino"), onPressed: ()=>print("Cupertino click"), color: Colors.green),
-          RaisedButton(child: Text("ShowToast"), onPressed: (){
- 
-             // var toast = Toast();
-             Toast.show("msg from toast", context);
+          RaisedButton(child: Text("ConnectivityCheck"), onPressed: ()async{ 
+             var status = await (Connectivity().checkConnectivity());
+             Toast.show("Current Network is $status", context);
 
-          },)
+          },),
         ],
       ),
     );
   }
+
 }
 
 class User {
