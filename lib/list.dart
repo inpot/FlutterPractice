@@ -53,11 +53,14 @@ class _ListBody extends StatelessWidget {
         case ListStatus.LOADING:
           emptyMsg = "Loading...";
           break;
-        case ListStatus.ERROR:
+        case ListStatus.EMPTY:
           emptyMsg = "No Content Here";
           break;
         case ListStatus.ERROR:
           emptyMsg = "Loading Error, try it later";
+          break;
+        case ListStatus.NO_NETWORK:
+          emptyMsg = "No Network, pleas check Network settings";
           break;
         default:
         emptyMsg = "No Initial...";

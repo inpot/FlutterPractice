@@ -1,9 +1,10 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:test1/basevm.dart';
 import 'package:test1/list.dart';
 
-abstract class BaseListVm<T> with ChangeNotifier{
+abstract class BaseListVm<T> with ChangeNotifier, BaseVm{
 
   List<T> datas = List<T>();
   ListStatus status = ListStatus.IDLE;
@@ -25,6 +26,14 @@ abstract class BaseListVm<T> with ChangeNotifier{
       notifyListeners();
     }
     status  = ListStatus.LOADING;
+    var hasNet = await this.hasNet();
+    if(!hasNet){
+      status = ListStatus.NO_NETWORK;
+      refreshing = false;
+      notifyListeners();
+      return;
+
+    }
     var tmp = await doReload(page);
     hasMore = tmp.length >= pageSize;
     datas.addAll(tmp);
@@ -56,4 +65,5 @@ enum ListStatus {
   LOADING,
   EMPTY,
   ERROR,
+  NO_NETWORK,
 }

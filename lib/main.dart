@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:test1/splash.dart';
 import 'dart:math' as math;
 
 void main() {
+  debugRepaintRainbowEnabled = true;
   debugDefaultTargetPlatformOverride = TargetPlatform.android;
   runApp(MyApp());
 }

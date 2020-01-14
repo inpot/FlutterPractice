@@ -16,8 +16,8 @@ class _SplashPageState extends State<SplashPage> {
   int current = 5;
   var watting = 3;
 
-final Connectivity _connectivity = Connectivity();
-  StreamSubscription<ConnectivityResult> _connectivitySubscription;
+// final Connectivity _connectivity = Connectivity();
+//   StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ final Connectivity _connectivity = Connectivity();
             ], mainAxisAlignment: MainAxisAlignment.spaceAround,):null
           )
       
-      
+
       ]),
       color: Colors.black12,
     );
@@ -74,14 +74,14 @@ print("return result $res");
   @override
   void dispose() {
     timer.cancel();
-    _connectivitySubscription.cancel();
+   // _connectivitySubscription.cancel();
     super.dispose();
   }
 
   void onChange(ConnectivityResult result){
         Toast.show("Connectivity Change $result", context); 
   }
-  
+
   Timer timer;
   @override
   void initState() {
@@ -95,7 +95,7 @@ print("return result $res");
       });
     });
 
-    _connectivitySubscription = _connectivity.onConnectivityChanged.listen(onChange);
+   // _connectivitySubscription = _connectivity.onConnectivityChanged.listen(onChange);
     super.initState();
   }
 }
