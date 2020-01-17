@@ -1,12 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:test1/spider.dart';
 import 'package:test1/splash.dart';
 import 'dart:math' as math;
 
 void main() {
-  debugRepaintRainbowEnabled = true;
-  debugDefaultTargetPlatformOverride = TargetPlatform.android;
+  // debugRepaintRainbowEnabled = true;
+  // debugProfilePaintsEnabled =true;
+  // debugProfileBuildsEnabled = true;
+  // debugPaintSizeEnabled = true;
+  // debugDefaultTargetPlatformOverride = TargetPlatform.android;
   runApp(MyApp());
 }
 
@@ -54,6 +59,52 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var current = 0;
+  var imgs = [
+    "20200115163628.jpg",
+"20200115163729.jpg",
+"20200115163739.jpg",
+"20200115163755.jpg",
+"20200115163801.jpg",
+"20200115163807.jpg",
+"20200115163815.jpg",
+"20200116110120.jpg",
+"20200116110201.jpg",
+"20200116110211.jpg",
+"20200116110218.jpg",
+"20200116110238.jpg",
+"20200116110246.jpg",
+"20200116110255.jpg",
+"20200116110303.jpg",
+"20200116110308.jpg",
+"20200116110757.jpg",
+"20200116110815.jpg",
+"20200116110829.jpg",
+"20200116110842.jpg",
+"20200116142851.jpg",
+"20200116142906.jpg",
+"20200116142927.jpg",
+"20200116142938.jpg",
+"20200116142946.jpg",
+"20200116143022.jpg",
+"20200116143148.jpg",
+"20200116143202.jpg",
+"20200116143212.jpg",
+"20200116143254.jpg",
+"20200116143302.jpg",
+"20200116143307.jpg",
+"20200116143314.jpg",
+"20200116143327.jpg",
+"20200116143351.jpg",
+"20200116143401.jpg",
+"20200116143408.jpg",
+"20200116143414.jpg",
+"20200116143420.jpg",
+"20200116143511.jpg",
+"20200116143524.jpg",
+"640.webp",
+"6402.webp",
+"64022.jpg",
+  ];
 
   void onBottomClick(int position) {
     setState(() {
@@ -69,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    print("build main");
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -84,13 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: TabBarView(
           children: [
-            Tooltip(
-              message: "aaaaa",
-              child: Icon(
-                Icons.chevron_right,
-                size: 80,
-              ),
-            ),
+            SpiderPage(),
             Table(
               border: TableBorder.all(color: Colors.white, width: 5),
               children: [
@@ -100,10 +146,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.deepOrange,
                       width: 100,
                       height: 100,
-                      child: IconButton(icon:Icon( Icons.chevron_right), onPressed: (){
-                          showAboutDialog(context: context,applicationName: "Test",
-                          applicationVersion: "2.0",
-                          applicationLegalese: """Embeds an Android view in the Widget hierarchy.
+                      child: IconButton(
+                        icon: Icon(Icons.chevron_right),
+                        onPressed: () {
+                          showAboutDialog(
+                            context: context, applicationName: "Test",
+                            applicationVersion: "2.0",
+                            applicationLegalese:
+                                """Embeds an Android view in the Widget hierarchy.
 
 Requires Android API level 20 or greater.
 
@@ -114,12 +164,11 @@ The embedded Android view is painted just like any other Flutter widget and tran
 The widget fills all available space, the parent of this object must provide bounded layout constraints. The widget participates in Flutter's GestureArenas, and dispatches touch events to the platform view iff it won the arena. Specific gestures that should be dispatched to the platform view can be specified in the gestureRecognizers constructor parameter. If the set of gesture recognizers is empty, a gesture will be dispatched to the platform view iff it was not claimed by any other gesture recognizer. The Android view object is created using a PlatformViewFactory. Plugins can register platform view factories with PlatformViewRegistry#registerViewFactory.
 
 Registration is typically done in the plugin's registerWith method, e.g:aaaadfa\nadsfasddf\n0000000000\n098665555sdfasdf""",
-                          // children: [Text("000000"),Icon(Icons.clear_all)],
-                         // applicationIcon: Icon(Icons.child_care),
+                            // children: [Text("000000"),Icon(Icons.clear_all)],
+                            // applicationIcon: Icon(Icons.child_care),
                           );
-
-
-                      },),
+                        },
+                      ),
                     ),
                     Container(
                       color: Colors.green,
@@ -212,7 +261,19 @@ Registration is typically done in the plugin's registerWith method, e.g:aaaadfa\
                 ),
               ],
             ),
-            Icon(Icons.directions_bike),
+            SingleChildScrollView( child: 
+            
+            Wrap(
+                  children:  imgs.map((img) =>
+
+                      ClipOval( 
+                        child: Image.asset("assets/$img", width: 120,height: 120,fit: BoxFit.cover,), 
+                      )
+
+                  ).toList(),
+
+                  ),
+            )
           ],
         ),
         // bottomNavigationBar: BottomNavigationBar(
@@ -233,60 +294,55 @@ Registration is typically done in the plugin's registerWith method, e.g:aaaadfa\
         // ),
         bottomNavigationBar: BottomAppBar(
           shape: OutterCirclerNoched(),
-          color: Colors.white12,
+          color: Colors.deepOrangeAccent,
           child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                
-                      IconButton(
-                        icon: Icon(Icons.home),
-                        color: current == 0 ? Colors.green : Colors.white,
-                        onPressed: () {
-                          setState(() {
-                            current = 0;
-                          });
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.home),
-                        color: current == 1 ? Colors.green: Colors.white,
-                        onPressed: () {
-                          setState(() {
-                            current = 1;
-                          });
-                        },
-                      ),
-                          
-                      Opacity(
-                        opacity: 0.0, child: IconButton(
-                          icon: Icon(Icons.home),
-                          color: Colors.transparent,
-                          onPressed: null,
-                        ),
-                      ),
-
-                      IconButton(
-                        icon: Icon(Icons.home),
-                        color: current == 2 ? Colors.green: Colors.white,
-                        onPressed: () {
-                          setState(() {
-                            current = 2;
-                          });
-                        },
-                          
-
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.airplay),
-                        color: current == 3 ? Colors.green: Colors.white,
-                        onPressed: () {
-                          setState(() {
-                            current = 3;
-                          });
-                        },
-                      ),
-                   
+                IconButton(
+                  icon: Icon(Icons.home),
+                  color: current == 0 ? Colors.green : Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      current = 0;
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.home),
+                  color: current == 1 ? Colors.green : Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      current = 1;
+                    });
+                  },
+                ),
+                Opacity(
+                  opacity: 0.0,
+                  child: IconButton(
+                    icon: Icon(Icons.home),
+                    color: Colors.transparent,
+                    onPressed: null,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.home),
+                  color: current == 2 ? Colors.green : Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      current = 2;
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.airplay),
+                  color: current == 3 ? Colors.green : Colors.white,
+                  onPressed: () {
+                    setState(() {
+                      current = 3;
+                    });
+                  },
+                ),
               ]),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -298,18 +354,27 @@ Registration is typically done in the plugin's registerWith method, e.g:aaaadfa\
       ),
     );
   }
+  List<Widget> generateImage(){
+
+ var result = imgs.map((img) =>
+
+                      ClipOval( 
+                        child: Image.asset("assets/$img", width: 120,height: 120,fit: BoxFit.cover,), 
+                      )
+
+                  ).toList();
+
+
+return result;
+  }
+
+
 }
 
-class OutterCirclerNoched extends CircularNotchedRectangle{
-
-
-
-
-@override
+class OutterCirclerNoched extends CircularNotchedRectangle {
+  @override
   Path getOuterPath(Rect host, Rect guest) {
-    
-    if (guest == null || !host.overlaps(guest))
-      return Path()..addRect(host);
+    if (guest == null || !host.overlaps(guest)) return Path()..addRect(host);
 
     // The guest's shape is a circle bounded by the guest rectangle.
     // So the guest's radius is half the guest width.
@@ -346,25 +411,24 @@ class OutterCirclerNoched extends CircularNotchedRectangle{
 
     // p3, p4, and p5 are the control points for segment B, which is a mirror
     // of segment A around the y axis.
-    p[3] = Offset(-1.0 * p[2].dx +10 , p[2].dy);
-    p[4] = Offset(-1.0 * p[1].dx + 5 , p[1].dy);
+    p[3] = Offset(-1.0 * p[2].dx + 10, p[2].dy);
+    p[4] = Offset(-1.0 * p[1].dx + 5, p[1].dy);
     p[5] = Offset(-1.0 * p[0].dx + 10, p[0].dy);
 
     // translate all points back to the absolute coordinate system.
-    for (int i = 0; i < p.length; i += 1)
-      p[i] += guest.center;
+    for (int i = 0; i < p.length; i += 1) p[i] += guest.center;
 
     return Path()
       ..moveTo(host.left, host.top)
-      ..lineTo(p[1].dx-5 , p[1].dy)
+      ..lineTo(p[1].dx - 5, p[1].dy)
       ..arcToPoint(
         p[4],
         radius: Radius.circular(notchRadius),
-        clockwise:true,
+        clockwise: true,
       )
       ..lineTo(host.right, host.top)
       ..lineTo(host.right, host.bottom)
       ..lineTo(host.left, host.bottom)
       ..close();
-  } 
+  }
 }
