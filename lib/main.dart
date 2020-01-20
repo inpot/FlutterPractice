@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:test1/spider.dart';
+import 'package:test1/spiderXh.dart';
 import 'package:test1/splash.dart';
 import 'dart:math' as math;
 
@@ -137,130 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: TabBarView(
           children: [
             SpiderPage(),
-            Table(
-              border: TableBorder.all(color: Colors.white, width: 5),
-              children: [
-                TableRow(
-                  children: [
-                    Container(
-                      color: Colors.deepOrange,
-                      width: 100,
-                      height: 100,
-                      child: IconButton(
-                        icon: Icon(Icons.chevron_right),
-                        onPressed: () {
-                          showAboutDialog(
-                            context: context, applicationName: "Test",
-                            applicationVersion: "2.0",
-                            applicationLegalese:
-                                """Embeds an Android view in the Widget hierarchy.
-
-Requires Android API level 20 or greater.
-
-Embedding Android views is an expensive operation and should be avoided when a Flutter equivalent is possible.
-
-The embedded Android view is painted just like any other Flutter widget and transformations apply to it as well.
-
-The widget fills all available space, the parent of this object must provide bounded layout constraints. The widget participates in Flutter's GestureArenas, and dispatches touch events to the platform view iff it won the arena. Specific gestures that should be dispatched to the platform view can be specified in the gestureRecognizers constructor parameter. If the set of gesture recognizers is empty, a gesture will be dispatched to the platform view iff it was not claimed by any other gesture recognizer. The Android view object is created using a PlatformViewFactory. Plugins can register platform view factories with PlatformViewRegistry#registerViewFactory.
-
-Registration is typically done in the plugin's registerWith method, e.g:aaaadfa\nadsfasddf\n0000000000\n098665555sdfasdf""",
-                            // children: [Text("000000"),Icon(Icons.clear_all)],
-                            // applicationIcon: Icon(Icons.child_care),
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      color: Colors.green,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.indigo,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.lime,
-                      width: 100,
-                      height: 100,
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Container(
-                      color: Colors.deepOrange,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.indigo,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.indigo,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.lime,
-                      width: 100,
-                      height: 100,
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Container(
-                      color: Colors.deepOrange,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.green,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.indigo,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.lime,
-                      width: 100,
-                      height: 100,
-                    ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Container(
-                      color: Colors.deepOrange,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.green,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.indigo,
-                      width: 100,
-                      height: 100,
-                    ),
-                    Container(
-                      color: Colors.lime,
-                      width: 100,
-                      height: 100,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            SpiderXh(),
             SingleChildScrollView( child: 
             
             Wrap(

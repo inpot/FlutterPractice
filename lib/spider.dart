@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:html/dom.dart';
 import 'package:csslib/parser.dart' as css;
 import 'package:flutter/src/widgets/text.dart' as widget;
 import 'package:html/parser.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:test1/basevm.dart';
 
@@ -12,7 +15,7 @@ class SpiderPage extends StatelessWidget {
   final vm = SpiderVM();
   @override
   Widget build(BuildContext context) {
-    vm.downImgs();
+    // vm.downImgs();
     return MultiProvider(
       child: _SpiderBody(vm),
       providers: [ChangeNotifierProvider.value(value: vm.imgs)],
@@ -30,7 +33,7 @@ class _SpiderBody extends StatelessWidget {
         return Center(
           child: IconButton(
             icon: Icon(Icons.arrow_downward),
-            onPressed: () => vm.downImgs(),
+            onPressed: () => vm.downloadAllImgs(),
           ),
         );
       } else {
@@ -38,20 +41,22 @@ class _SpiderBody extends StatelessWidget {
           child: Wrap(
             alignment: WrapAlignment.center,
             children: imgs.urls.map((item) {
-              return ClipOval(child: InkWell(
-                child: Image.network(
-                  item.thumb,
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.cover,
-                  headers: headers,
+              return ClipOval(
+                child: InkWell(
+                  child: Image.network(
+                    item.thumb,
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                    headers: headers,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => DetailPic(item.detailLink)));
+                  },
                 ),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (ctx) => DetailPic(item.detailLink)));
-                },),
               );
             }).toList(),
           ),
@@ -64,16 +69,56 @@ class _SpiderBody extends StatelessWidget {
 var headers = {
   "accept": "*/*",
   "accept-language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
-  "User-Agent":
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
+  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
 };
 
 class SpiderVM extends BaseVm {
   var imgs = Imgs();
 
-  String url360 = "http://www.521609.com/daxuexiaohua/"; 
+  String url360 = "http://www.521609.com/daxuexiaohua/";
   var token360 = 'div.index_img.list_center > ul > li > a';
   var urlKey360 = "src";
+  var urlPre = "http://www.521609.com/zhuankexiaohua/list7";
+  var urlFix = ".html";
+  DetailPicVM detailPicVM = DetailPicVM();
+  var tokenBig = "#bigimg";
+
+  void downloadAllImgs() async {
+    var imgLinks = List<String>();
+    Directory appDocDir = await getExternalStorageDirectory();
+      String path= appDocDir.path;
+    var dio = Dio();
+    dio.options.headers = headers;
+    for (int i = 1; i < 34; i++) {
+      String url = urlPre + i.toString() + urlFix;
+      print("Page :$i url =  $url");
+      List<Pic> page = await doDownImgs(url, token360, urlKey360);
+      page.forEach((pic) async {
+        String str = await detailPicVM.doDownImgs(pic.detailLink, tokenBig, "src");
+        print("Page :$i url =  $url BigImg $str");
+        if(str != null && str.isNotEmpty){
+            imgLinks.add(str); 
+            download2Disk(str, dio, path);
+        }
+      });
+    }
+  }
+
+  void download2Disk(String img, Dio dio, String path)async{
+
+      print("start Download Success $img");
+      int last = img.lastIndexOf("/");
+      var fileName = img.substring(last + 1);
+      var file = "$path/$fileName";
+      dio.download(img, file, onReceiveProgress: (count, total ){
+          var progress = count* 100 /total;
+          int prg = progress.toInt();
+          print("download ${prg}%");
+          if(progress >= 100){ 
+              print("download Success $img"); 
+          } 
+      });
+  }
 
   void downImgs() async {
     var mz2 = await doDownImgs(url360, token360, urlKey360);
@@ -100,13 +145,17 @@ class SpiderVM extends BaseVm {
   }
 }
 
-Future<Document> downloadHtml(String url) async {
-  if(url == null || url.isEmpty){
+Future<Document> downloadHtml(String url,{ Map<String,String> header}) async {
+  if (url == null || url.isEmpty) {
     return null;
   }
   var dio = Dio();
+  if(header == null){ 
   dio.options.headers = headers;
-  Response<String> response = await dio.get(url); 
+  }else{ 
+  dio.options.headers = header;
+  }
+  Response<String> response = await dio.get(url);
   print("statusCode ${response.statusCode}");
   if (response.statusCode != 200) {
     return null;
@@ -145,15 +194,17 @@ class DetailPic extends StatelessWidget {
     vm.loaded = false;
     vm.loadImg(link);
     return Scaffold(
-      appBar: AppBar(title: widget.Text("aaaa"),),
+        appBar: AppBar(
+          title: widget.Text("aaaa"),
+        ),
         body: MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: vm,
-        )
-      ],
-      child: _DetailBody(),
-    ));
+          providers: [
+            ChangeNotifierProvider.value(
+              value: vm,
+            )
+          ],
+          child: _DetailBody(),
+        ));
   }
 }
 
@@ -167,8 +218,6 @@ class _DetailBody extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else {
-
-
           return Image.network(
             value.imgUrl,
             fit: BoxFit.cover,
@@ -191,9 +240,13 @@ class DetailPicVM with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> doDownImgs(String url, token, String urlKey) async {
+  Future<String> doDownImgs(String url, String token, String urlKey) async {
     var document = await downloadHtml(url);
     var res1 = document.querySelectorAll(token);
+    if(res1.isEmpty){
+    print("download failed url:${url} token=$token urlKey=$urlKey");
+      return null;
+    }
     print("res1  ${res1.length}");
     var urls = List<String>();
     res1.forEach((item) {
