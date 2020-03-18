@@ -10,61 +10,48 @@ class RegistPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("regist"),
       ),
-      body: Column(children: [
-        //CustomPaint(painter: MyPaint(), size: Size(300, 300)),
-      Form(
-        child: Column(
-          children: <Widget>[
-
-      TextFormField(
-  decoration: const InputDecoration(
-            hintText: 'Enter your email',
-            labelText: "Email"
-          ),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
-
+      body: Container(
+        padding: EdgeInsets.all(8),
+        child: Column(children: [
+          //CustomPaint(painter: MyPaint(), size: Size(300, 300)),
+          Form(
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  decoration: const InputDecoration(
+                      hintText: 'Enter your email', labelText: "Email"),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                      hintText: 'Enter your email', labelText: "UserName"),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                      hintText: 'Enter your email', labelText: "Password"),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter some text';
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          )
+        ]),
       ),
-      TextFormField(
-  decoration: const InputDecoration(
-            hintText: 'Enter your email',
-            labelText: "UserName"
-          ),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
-
-      ),
-      TextFormField(  decoration: const InputDecoration(
-            hintText: 'Enter your email',
-            labelText: "Password"
-          ),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },),
-
-          ],
-
-
-        ),
-
-
-
-      )
-      
-      
-      
-      ]),
     );
   }
 }
@@ -99,7 +86,8 @@ class MyPaint extends CustomPainter {
         true,
         paint);
     paint.strokeWidth = 3;
-    canvas.drawRRect( RRect.fromLTRBR(20, 20, 100, 100, Radius.circular(6)), paint);
+    canvas.drawRRect(
+        RRect.fromLTRBR(20, 20, 100, 100, Radius.circular(6)), paint);
 
     paint.style = PaintingStyle.fill;
     canvas.drawPoints(
@@ -128,9 +116,9 @@ class MyPaint extends CustomPainter {
     paint.color = Colors.black;
     paragraph.pushStyle(ui.TextStyle(color: Colors.black));
     canvas.drawParagraph(paragraph.build()..layout(pc), Offset(80, 100));
-    paint.strokeWidth =2;
+    paint.strokeWidth = 2;
     paint.color = Colors.red;
-    canvas.drawOval(Rect.fromLTRB(0,0,100,200), paint);
+    canvas.drawOval(Rect.fromLTRB(0, 0, 100, 200), paint);
   }
 
   @override

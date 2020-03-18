@@ -1,5 +1,6 @@
 # Miscellaneous
 .metadata
+.flutter-plugins-dependencies
 .vscode
 pubspec.lock
 *.class
