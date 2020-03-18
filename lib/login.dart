@@ -10,7 +10,6 @@ import 'package:test1/auth2.dart';
 import 'package:test1/expensive.dart';
 import 'package:test1/list.dart';
 import 'package:test1/main.dart';
-import 'package:test1/svg.dart';
 import 'package:test1/thread.dart';
 import 'package:test1/video.dart';
 import 'package:test1/vs.dart';
@@ -109,7 +108,8 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                       await DefaultAssetBundle.of(context).load(assetName);
                   var data = svg.buffer.asUint8List();
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SvgPage()));
+                      //MaterialPageRoute(builder: (context) => SvgPage()));
+                      MaterialPageRoute(builder: (context) => VideoPage()));
                 },
               ),
               RaisedButton(

@@ -29,7 +29,10 @@ class _SplashPageState extends State<SplashPage> {
       child: Column(children:<Widget>[ Row(
         children: <Widget>[
           Spacer(),
-          RaisedButton(child: Text("$current", style: TextStyle(fontSize:24,),), onPressed: current <= 0 ? toNextPage : null,),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: RaisedButton(child: Text("$current", style: TextStyle(fontSize:24,),), onPressed: current <= 0 ? toNextPage : null,),
+          ),
         ],
       ),
           Spacer(), 
