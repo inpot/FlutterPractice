@@ -20,9 +20,12 @@ class TestHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final count = CountState();
-    return MultiProvider(
-      providers: [ChangeNotifierProvider.value(value: count)],
-      child: HomePage(),
+    return Scaffold(
+      appBar: AppBar(title:Text("Test Home")),
+          body: MultiProvider(
+        providers: [ChangeNotifierProvider.value(value: count)],
+        child: HomePage(),
+      ),
     );
   }
 }

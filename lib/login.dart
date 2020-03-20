@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
@@ -57,6 +58,14 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   var bytes = utf8.encode("input");
                   var encoded = sha256.convert(bytes);
                   print("encode : $encoded");
+                  
+       print("NumberOf Processors:${Platform.numberOfProcessors}");
+       print("Platform Version:${Platform.version}");
+       print("Operation System:${Platform.operatingSystem}");
+       print("System Version:${Platform.operatingSystemVersion}");
+       print("Path Separator:${Platform.pathSeparator}");
+       print("Path Of Executable:${Platform.resolvedExecutable}");
+       print("Current Platform: $defaultTargetPlatform");
                 },
                 color: Colors.blue,
                 colorBrightness: Brightness.light,
@@ -127,7 +136,7 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   var httpAdapter = dio.httpClientAdapter as DefaultHttpClientAdapter;
                   httpAdapter.onHttpClientCreate = (HttpClient client){ 
                     client.findProxy = (url){
-                        return "PROXY 192.168.0.112:8001;"; 
+                        return "PROXY localhost:8001;"; 
                     };
                      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
                   };
