@@ -72,6 +72,21 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 splashColor: Colors.indigo,
               ),
               RaisedButton(
+                child: Text("Windows File Test"),
+                onPressed: () async {
+                  print("flatbutton");
+                  var file = File("G:\\work\\test1\\build\\windows\\x64\\Debug\\Runner\\test.txt");
+                  if(await file.exists()){
+                      await file.delete();
+                  }
+                  await file.create();
+                  await file.writeAsString("test content");
+                 var success = await file.exists() ;
+                 print("write success $success");
+
+                },
+              ),
+              RaisedButton(
                 child: Text("toListPage"),
                 onPressed: () {
                   print("flatbutton");
