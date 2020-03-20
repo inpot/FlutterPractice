@@ -13,8 +13,8 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  int current = 5;
-  var watting = 3;
+  int current = 2;
+  var watting = 2;
 
 // final Connectivity _connectivity = Connectivity();
 //   StreamSubscription<ConnectivityResult> _connectivitySubscription;

@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:crypto/crypto.dart';
+import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:test1/auth2.dart';
@@ -110,6 +114,33 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   Navigator.push(context,
                       //MaterialPageRoute(builder: (context) => SvgPage()));
                       MaterialPageRoute(builder: (context) => VideoPage()));
+                },
+              ),
+              RaisedButton(
+                child: Text("DoH Json Test"),
+                onPressed: () async {
+                  print("flatbutton");
+                  var url = "https://dns.google/resolve?name=twitter.com&type=a&do=1";
+                  var dio = Dio();
+                  dio.options.headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36";
+                  dio.options.contentType = "text";
+                  var httpAdapter = dio.httpClientAdapter as DefaultHttpClientAdapter;
+                  httpAdapter.onHttpClientCreate = (HttpClient client){ 
+                    client.findProxy = (url){
+                        return "PROXY 192.168.0.112:8001;"; 
+                    };
+                     client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+                  };
+                  Response<String> result = await dio.get(url);
+                  var content = result.data;
+                  Map<String, dynamic>  resJson = jsonDecode(content);
+                  List<dynamic> answer = resJson["Answer"];
+                  answer.forEach((element) { 
+                      var name = element["name"];  
+                      var ip = element["data"];
+                      print("addr:$name:$ip"); 
+                  }); 
+                  print("flatbutton end");
                 },
               ),
               RaisedButton(
