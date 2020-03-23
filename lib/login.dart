@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:test1/auth2.dart';
 import 'package:test1/expensive.dart';
+import 'package:test1/gfwlist.dart';
 import 'package:test1/list.dart';
 import 'package:test1/main.dart';
 import 'package:test1/thread.dart';
@@ -100,6 +101,14 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   print("flatbutton");
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => TestHome()));
+                },
+              ),
+              RaisedButton(
+                child: Text("Translate gfwlist 2 dnsmasq"),
+                onPressed: () {
+                  print("flatbutton");
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) =>GfwListPage()));
                 },
               ),
               RaisedButton(
