@@ -96,7 +96,8 @@ class _GfwPageBody extends StatelessWidget {
                 }),
                 RaisedButton(child:Text("2Dnsmasq"), onPressed: ()async{ 
                   vm.convert2dnsmasq();
-        Text("GfwList 2 dnsmasq"), 
+                }),
+        Text("GfwList 2 dnsmasq") 
 
       ],
     );
