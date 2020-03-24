@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:file_chooser/file_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -95,6 +96,11 @@ class _GfwPageBody extends StatelessWidget {
 
                 }),
                 RaisedButton(child:Text("2Dnsmasq"), onPressed: ()async{ 
+                  var result = await showSavePanel();
+                  if(result.paths.length >0 ){
+                      vm.savePath = result.paths[0]; 
+                      }
+                  print("${result.paths[0]}");
                   vm.convert2dnsmasq();
                 }),
         Text("GfwList 2 dnsmasq") 
@@ -115,6 +121,7 @@ class GfwVM with ChangeNotifier{
   String ipsetName = "gfwlist";
   var downloadStr = "";
   var progress = 0.0;
+  var savePath = "D:\\";
 
   Future convert2dnsmasq() async {
     progress = 0.0;
@@ -136,11 +143,11 @@ class GfwVM with ChangeNotifier{
     });
     _appendLine("convert gfwlist success");
     // print(builder2.toString());
-    //Directory appDocDir = await getExternalStorageDirectory();
+    // Android Directory appDocDir = await getExternalStorageDirectory();
     //String appDocPath = appDocDir.path;
-    String appDocPath = "D:\\";
-    var fileName = "/gfwlist.conf";
-    var file = File("$appDocPath$fileName");
+    //String appDocPath = savePath;
+    //var fileName = "/gfwlist.conf";
+    var file = File(savePath);
     var exists = await file.exists();
     _appendLine("file exists $exists");
     if (exists) {
