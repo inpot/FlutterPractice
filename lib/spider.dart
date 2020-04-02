@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html/dom.dart';
-import 'package:csslib/parser.dart' as css;
-import 'package:flutter/src/widgets/text.dart' as widget;
+import 'package:flutter/src/widgets/text.dart' as widgets;
 import 'package:html/parser.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +17,10 @@ class SpiderPage extends StatelessWidget {
     // vm.downImgs();
     return MultiProvider(
       child: _SpiderBody(vm),
-      providers: [ChangeNotifierProvider.value(value: vm.imgs)],
+      providers: [
+        ChangeNotifierProvider.value(value: vm.imgs),
+        ChangeNotifierProvider.value(value: vm),
+        ],
     );
   }
 }
@@ -30,10 +32,15 @@ class _SpiderBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<Imgs>(builder: (context, imgs, widget) {
       if (imgs.urls.length <= 0) {
-        return Center(
-          child: IconButton(
-            icon: Icon(Icons.arrow_downward),
-            onPressed: () => vm.downloadAllImgs(),
+        return Center( 
+          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Consumer<SpiderVM>(builder: (context, value,child)=> widgets.Text("Progress ${value.totalProgress}")),
+              IconButton(
+                icon: Icon(Icons.arrow_downward),
+                onPressed: () => vm.downloadAllImgs(),
+              ),
+            ],
           ),
         );
       } else {
@@ -72,7 +79,7 @@ var headers = {
   "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
 };
 
-class SpiderVM extends BaseVm {
+class SpiderVM extends BaseVm with ChangeNotifier {
   var imgs = Imgs();
 
   String url360 = "http://www.521609.com/daxuexiaohua/";
@@ -82,14 +89,26 @@ class SpiderVM extends BaseVm {
   var urlFix = ".html";
   DetailPicVM detailPicVM = DetailPicVM();
   var tokenBig = "#bigimg";
+  var totalProgress = "0.00";
+  var path = "";
 
-  void downloadAllImgs() async {
+  Future<String> downloadAllImgs() async {
     var imgLinks = List<String>();
-    Directory appDocDir = await getExternalStorageDirectory();
-      String path= appDocDir.path;
+    var dir = await getApplicationSupportDirectory(); 
+    var downloadDir = new Directory(dir.path + Platform.pathSeparator + "imgs");
+    if(! await downloadDir.exists()){
+      await downloadDir.create(recursive: true);
+    }
+    path =downloadDir.path;
+    if(path == null || path.isEmpty){
+      print("Path == null");
+      return "Path == null";
+    } 
+    print("Path: $path");
     var dio = Dio();
     dio.options.headers = headers;
-    for (int i = 1; i < 34; i++) {
+    var pageCount = 34;
+    for (int i = 1; i < pageCount; i++) {
       String url = urlPre + i.toString() + urlFix;
       print("Page :$i url =  $url");
       List<Pic> page = await doDownImgs(url, token360, urlKey360);
@@ -101,7 +120,10 @@ class SpiderVM extends BaseVm {
             download2Disk(str, dio, path);
         }
       });
+      totalProgress = (100 * i / pageCount).toStringAsFixed(2);
+      notifyListeners();
     }
+    return "success";
   }
 
   void download2Disk(String img, Dio dio, String path)async{
@@ -195,7 +217,7 @@ class DetailPic extends StatelessWidget {
     vm.loadImg(link);
     return Scaffold(
         appBar: AppBar(
-          title: widget.Text("aaaa"),
+          title: widgets.Text("aaaa"),
         ),
         body: MultiProvider(
           providers: [

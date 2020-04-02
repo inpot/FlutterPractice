@@ -15,6 +15,10 @@ class Observable<T> with ChangeNotifier{
 
   T get() => _value;
 
+  @override
+  String toString() {
+    return _value.toString();
+  }
 }
 
 class Observable2<T,R> with ChangeNotifier{

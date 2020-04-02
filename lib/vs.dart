@@ -7,11 +7,17 @@ import 'package:path_provider/path_provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-class CountState with ChangeNotifier {
-  int _count = 0;
-  get count => _count;
+import 'base.dart';
+
+class CountStateVM with ChangeNotifier {
+  var count = Observable(0);
+  var count2 = Observable(0);
+
   void increment() {
-    _count++;
+    var tmp = count.get();
+    print("tmp $tmp");
+    count.set(++tmp);
+    print("tmp2 $count");
     notifyListeners();
   }
 }
@@ -19,11 +25,14 @@ class CountState with ChangeNotifier {
 class TestHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final count = CountState();
+    final count = CountStateVM();
     return Scaffold(
       appBar: AppBar(title:Text("Test Home")),
           body: MultiProvider(
-        providers: [ChangeNotifierProvider.value(value: count)],
+        providers: [
+          ChangeNotifierProvider.value(value: count),
+          ChangeNotifierProvider.value(value: count.count) 
+        ],
         child: HomePage(),
       ),
     );
@@ -47,10 +56,14 @@ class HomePage extends StatelessWidget {
               YellowBox(),
               BlueBox(),
               GreenBox(),
+              RaisedButton(child:Text("BTN2"), onPressed: (){
+                
+
+              })
             ],
           ),
         ),
-        floatingActionButton: Consumer<CountState>(
+        floatingActionButton: Consumer<CountStateVM>(
             builder: (ctx, stat, child) => FloatingActionButton(
                   onPressed: () {
                     stat.increment();
@@ -69,7 +82,7 @@ class RedBox extends StatelessWidget {
       width: 150,
       height: 150,
       alignment: Alignment.center,
-      child: Consumer<CountState>(
+      child: Consumer<CountStateVM>(
         builder: (ctx, stat, child) => Text(
           "Red:${stat.count}",
           style: TextStyle(fontSize: 20),
@@ -88,7 +101,7 @@ class YellowBox extends StatelessWidget {
         width: 150,
         height: 150,
         alignment: Alignment.center,
-        child: Consumer<CountState>(
+        child: Consumer<CountStateVM>(
           builder: (ctx, stat, child) =>
               Text("Yellow:${stat.count}", style: TextStyle(fontSize: 20)),
         ));
@@ -109,7 +122,7 @@ class BlueBox extends StatelessWidget {
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => NextPage()));
         },
-        child: Consumer<CountState>(
+        child: Consumer<CountStateVM>(
           builder: (ctx, stat, child) =>
               Text("Blue:${stat.count}", style: TextStyle(fontSize: 20)),
         ),
@@ -127,7 +140,7 @@ class GreenBox extends StatelessWidget {
         width: 150,
         height: 150,
         alignment: Alignment.center,
-        child: Consumer<CountState>(
+        child: Consumer<CountStateVM>(
           builder: (ctx, stat, child) =>
               Text("GreenBox:${stat.count}", style: TextStyle(fontSize: 20)),
         ));
@@ -142,7 +155,7 @@ class NextPage extends StatelessWidget {
       body: Center(
           child: InkWell(
         onTap: () {
-          Provider.of<CountState>(context).increment();
+          Provider.of<CountStateVM>(context).increment();
         },
         child: Container(
             color: Colors.purple,

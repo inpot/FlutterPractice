@@ -1,3 +1,4 @@
+library util.prefs;
 import 'dart:convert';
 import 'dart:io';
 
