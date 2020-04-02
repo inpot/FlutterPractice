@@ -14,11 +14,9 @@ class SpiderPage extends StatelessWidget {
   final vm = SpiderVM();
   @override
   Widget build(BuildContext context) {
-    // vm.downImgs();
     return MultiProvider(
       child: _SpiderBody(vm),
       providers: [
-        ChangeNotifierProvider.value(value: vm.imgs),
         ChangeNotifierProvider.value(value: vm),
         ],
     );
@@ -30,10 +28,8 @@ class _SpiderBody extends StatelessWidget {
   SpiderVM vm;
   @override
   Widget build(BuildContext context) {
-    return Consumer<Imgs>(builder: (context, imgs, widget) {
-      if (imgs.urls.length <= 0) {
         return Center( 
-          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
             children: <Widget>[
               Consumer<SpiderVM>(builder: (context, value,child)=> widgets.Text("Progress ${value.totalProgress}")),
               IconButton(
@@ -43,33 +39,6 @@ class _SpiderBody extends StatelessWidget {
             ],
           ),
         );
-      } else {
-        return SingleChildScrollView(
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            children: imgs.urls.map((item) {
-              return ClipOval(
-                child: InkWell(
-                  child: Image.network(
-                    item.thumb,
-                    width: 120,
-                    height: 120,
-                    fit: BoxFit.cover,
-                    headers: headers,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (ctx) => DetailPic(item.detailLink)));
-                  },
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      }
-    });
   }
 }
 
@@ -80,7 +49,6 @@ var headers = {
 };
 
 class SpiderVM extends BaseVm with ChangeNotifier {
-  var imgs = Imgs();
 
   String url360 = "http://www.521609.com/daxuexiaohua/";
   var token360 = 'div.index_img.list_center > ul > li > a';
@@ -140,11 +108,6 @@ class SpiderVM extends BaseVm with ChangeNotifier {
               print("download Success $img"); 
           } 
       });
-  }
-
-  void downImgs() async {
-    var mz2 = await doDownImgs(url360, token360, urlKey360);
-    imgs.add(mz2);
   }
 
   Future<List<Pic>> doDownImgs(String url, token, String urlKey) async {
