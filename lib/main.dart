@@ -171,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         // ),
         bottomNavigationBar: BottomAppBar(
-          shape: OutterCirclerNoched(),
+       //   shape: OutterCirclerNoched(),
           color: Colors.deepOrangeAccent,
           child: Row(
               mainAxisSize: MainAxisSize.max,

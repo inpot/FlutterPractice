@@ -19,14 +19,6 @@ class SpiderXh extends StatelessWidget {
           child: Text("Download guai"),
           onPressed: () => vm.startDownloadGuai(),
         ),
-        RaisedButton(
-          child: Text("TestBt"),
-          onPressed: () {
-            var link = "红色内衣+黑色吊带丝袜";
-            var splits = link.split("/");
-            print(splits[0]);
-          },
-        ),
       ]),
     );
   }
@@ -41,8 +33,7 @@ class SpiderVM with ChangeNotifier {
     var catlog = ["xiaohua", "cosplay", "xiezhen", "chemo", "zipai"];
     var host = "http://www.guaihaha.cn/";
     var listPicToken = "#leftChild > div.listPic > a";
-    Directory appDocDir = await getExternalStorageDirectory();
-    String path = appDocDir.path;
+    var path= createDownloadDir("guaihaha");
     var catIndex = 1;
     catlog.forEach((cat) async {
       if (catIndex != 1) {
@@ -85,20 +76,25 @@ class SpiderVM with ChangeNotifier {
           });
         });
       }
-    });
-
+    }); 
     print("size: ");
+  }
+
+  Future<String> createDownloadDir(String subPath)async { 
+    Directory appDocDir = await getApplicationSupportDirectory();
+    var downloadDir = new Directory(appDocDir.path + Platform.pathSeparator + subPath);
+    if(! await downloadDir.exists()){
+      await downloadDir.create(recursive: true);
+    }
+    return downloadDir.path;
   }
 
   void startDownload() async {
     var document = await downloadHtml(listUrl);
-    var divs = document
-        .querySelectorAll("div.pinDaoPageImg > div > div.same > h3 > a");
-
-    Directory appDocDir = await getExternalStorageDirectory();
-    String path = appDocDir.path;
+    var divs = document .querySelectorAll("div.pinDaoPageImg > div > div.same > h3 > a"); 
     var dio = Dio();
     dio.options.headers = headers;
+    var dirPath = createDownloadDir("7dapei");
     var lists = await divs.forEach((item) async {
       var link = prefix + item.attributes["href"];
       var title = item.text;
@@ -111,12 +107,6 @@ class SpiderVM with ChangeNotifier {
       var person = await downloadHtml(link);
       var picAll = person.querySelectorAll("#contentID > div.pageNo > a");
       var picCount = picAll.length;
-      var dirName = title.split(" ")[0];
-      var dirPath = "$path/$dirName";
-      Directory dir = Directory(dirPath);
-      // if(!await dir.exists()){
-      await dir.create();
-      // }
       for (var j = 1; j <= picCount; j++) {
         var referUrl = listUrl;
         if (j > 1) {
@@ -132,7 +122,7 @@ class SpiderVM with ChangeNotifier {
   }
 
   var headers = {
-    "Referer": "http://www.8dapei.com/tuku/qingchun.html",
+    "Referer": "http://www.7dapei.com/tuku/qingchun.html",
     "Upgrade-Insecure-Requests": "1",
     "User-Agent":
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36",
