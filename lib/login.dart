@@ -43,13 +43,11 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [Colors.teal,Colors.pink],
-                stops: [0.0,1.0],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight, 
-            )
-
-        ),
+          colors: [Colors.teal, Colors.pink],
+          stops: [0.0, 1.0],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        )),
         child: SingleChildScrollView(
           child: Wrap(
             alignment: WrapAlignment.spaceAround,
@@ -62,14 +60,14 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   var bytes = utf8.encode("input");
                   var encoded = sha256.convert(bytes);
                   print("encode : $encoded");
-                  
-       print("NumberOf Processors:${Platform.numberOfProcessors}");
-       print("Platform Version:${Platform.version}");
-       print("Operation System:${Platform.operatingSystem}");
-       print("System Version:${Platform.operatingSystemVersion}");
-       print("Path Separator:${Platform.pathSeparator}");
-       print("Path Of Executable:${Platform.resolvedExecutable}");
-       print("Current Platform: $defaultTargetPlatform");
+
+                  print("NumberOf Processors:${Platform.numberOfProcessors}");
+                  print("Platform Version:${Platform.version}");
+                  print("Operation System:${Platform.operatingSystem}");
+                  print("System Version:${Platform.operatingSystemVersion}");
+                  print("Path Separator:${Platform.pathSeparator}");
+                  print("Path Of Executable:${Platform.resolvedExecutable}");
+                  print("Current Platform: $defaultTargetPlatform");
                 },
                 color: Colors.blue,
                 colorBrightness: Brightness.light,
@@ -79,15 +77,17 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 child: Text("Windows File Test"),
                 onPressed: () async {
                   print("flatbutton");
-                  var file = File("G:\\work\\test1\\build\\windows\\x64\\Debug\\Runner\\test.txt");
-                  if(await file.exists()){
-                      await file.delete();
+                  var file = File(
+                      "G:\\work\\test1\\build\\windows\\x64\\Debug\\Runner\\test.txt");
+                  if (await file.exists()) {
+                    await file.delete();
                   }
-                  await file.create();
+                  await file.create(recursive: true);
                   await file.writeAsString("test content");
-                 var success = await file.exists() ;
-                 print("write success $success");
-
+                  var success = await file.exists();
+                  print("write success $success");
+                  var content = await file.readAsString();
+                  print("the file content is: ${content}");
                 },
               ),
               RaisedButton(
@@ -100,17 +100,17 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
               ),
               RaisedButton(
                 child: Text("Url Launcher"),
-                onPressed: () async{
+                onPressed: () async {
                   await launch("http://pl.goinbowl.com");
                 },
               ),
               RaisedButton(
                 child: Text("pathprovider"),
-                onPressed: () async{
+                onPressed: () async {
                   print("flatbutton");
-                  var documentDir= await getApplicationDocumentsDirectory();
+                  var documentDir = await getApplicationDocumentsDirectory();
                   print("DocDir $documentDir");
-                  var tempDir= await getTemporaryDirectory();
+                  var tempDir = await getTemporaryDirectory();
                   print("tempDir $tempDir");
                   var downloads = await getApplicationSupportDirectory();
                   print("downloadPath $downloads");
@@ -130,7 +130,6 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   var pref = await SimplePref.getPref("first.xml");
                   var value = pref.getString("test", "AAA");
                   print("value : $value");
-
                 },
               ),
               RaisedButton(
@@ -145,7 +144,7 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 onPressed: () {
                   print("flatbutton");
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) =>GfwListPage()));
+                      MaterialPageRoute(builder: (context) => GfwListPage()));
                 },
               ),
               RaisedButton(
@@ -166,10 +165,17 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
               ),
               RaisedButton(
                 child: Text("Window Size"),
-                onPressed: () async{
+                onPressed: () async {
                   print("flatbutton");
                   var result = await getCurrentScreen();
                   print("${result.frame.toString()}");
+                },
+              ),
+              RaisedButton(
+                child: Text("Spider iqiyi"),
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Auth()));
                 },
               ),
               RaisedButton(
@@ -189,7 +195,8 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   var svg =
                       await DefaultAssetBundle.of(context).load(assetName);
                   var data = svg.buffer.asUint8List();
-                  Navigator.push(context,
+                  Navigator.push(
+                      context,
                       //MaterialPageRoute(builder: (context) => SvgPage()));
                       MaterialPageRoute(builder: (context) => VideoPage()));
                 },
@@ -198,26 +205,30 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 child: Text("DoH Json Test"),
                 onPressed: () async {
                   print("flatbutton");
-                  var url = "https://dns.google/resolve?name=twitter.com&type=a&do=1";
+                  var url =
+                      "https://dns.google/resolve?name=twitter.com&type=a&do=1";
                   var dio = Dio();
-                  dio.options.headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36";
+                  dio.options.headers["user-agent"] =
+                      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36";
                   dio.options.contentType = "text";
-                  var httpAdapter = dio.httpClientAdapter as DefaultHttpClientAdapter;
-                  httpAdapter.onHttpClientCreate = (HttpClient client){ 
-                    client.findProxy = (url){
-                        return "PROXY localhost:8001;"; 
+                  var httpAdapter =
+                      dio.httpClientAdapter as DefaultHttpClientAdapter;
+                  httpAdapter.onHttpClientCreate = (HttpClient client) {
+                    client.findProxy = (url) {
+                      return "PROXY localhost:8001;";
                     };
-                     client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+                    client.badCertificateCallback =
+                        (X509Certificate cert, String host, int port) => true;
                   };
                   Response<String> result = await dio.get(url);
                   var content = result.data;
-                  Map<String, dynamic>  resJson = jsonDecode(content);
+                  Map<String, dynamic> resJson = jsonDecode(content);
                   List<dynamic> answer = resJson["Answer"];
-                  answer.forEach((element) { 
-                      var name = element["name"];  
-                      var ip = element["data"];
-                      print("addr:$name:$ip"); 
-                  }); 
+                  answer.forEach((element) {
+                    var name = element["name"];
+                    var ip = element["data"];
+                    print("addr:$name:$ip");
+                  });
                   print("flatbutton end");
                 },
               ),

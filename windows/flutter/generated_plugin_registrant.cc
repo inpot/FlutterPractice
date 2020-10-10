@@ -5,17 +5,17 @@
 #include "generated_plugin_registrant.h"
 
 #include <file_chooser/file_chooser_plugin.h>
+#include <menubar/menubar_plugin.h>
+#include <url_launcher_windows/url_launcher_plugin.h>
 #include <window_size/window_size_plugin.h>
-#include <path_provider_fde/path_provider_plugin.h>
-#include <url_launcher_fde/url_launcher_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   FileChooserPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FileChooserPlugin"));
-  WindowSizePluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("WindowSizePlugin"));
-  PathProviderPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("PathProviderPlugin"));
+  MenubarPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("MenubarPlugin"));
   UrlLauncherPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("UrlLauncherPlugin"));
+  WindowSizePluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("WindowSizePlugin"));
 }

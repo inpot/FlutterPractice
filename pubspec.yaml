@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   provider: ^4.3.1
   permission_handler: '^4.0.0'
+  
   dio: ^3.0.7
   url_launcher: ^5.4.1
   path_provider: ^1.4.5
@@ -45,22 +46,10 @@ dependencies:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
-  color_panel:
-    git:
-      url: git://github.com/google/flutter-desktop-embedding.git
-      path: plugins/color_panel
   file_chooser:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
       path: plugins/file_chooser 
-  path_provider_fde:
-    git:
-      url: git://github.com/google/flutter-desktop-embedding.git
-      path: plugins/flutter_plugins/path_provider_fde 
-  url_launcher_fde:
-    git:
-      url: git://github.com/google/flutter-desktop-embedding.git
-      path: plugins/flutter_plugins/url_launcher_fde
 dev_dependencies:
   flutter_test:
     sdk: flutter
