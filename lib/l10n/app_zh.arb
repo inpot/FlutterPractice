@@ -1,5 +1,5 @@
 {
  "@@locale": "zh",
- "helloWorld": "你好"
+ "helloWorld": "{parmas} 你好"
 }
 

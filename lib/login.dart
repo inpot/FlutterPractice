@@ -9,6 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:menubar/menubar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,11 +28,6 @@ import 'package:window_size/window_size.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatelessWidget {
-  var txt =
-      r"""Fuchsia is an open source capability-based operating system currently being developed by Google. It first became known to the public when the project appeared on a self hosted form of git in August 2016 without any official announcement. The source documentation describes the reasoning behind the name as "Pink + Purple == Fuchsia (a new Operating System)"[1], which is a reference to Pink (Apple's first effort at a object-oriented, microkernel based operating system), and Purple (the original iPhone's codename)[2]. In contrast to prior Google-developed operating systems such as Chrome OS and Android, which are based on the Linux kernel, Fuchsia is based on a new microkernel called Zircon, named after the mineral.
-
-The GitHub project suggests Fuchsia can run on many platforms, from embedded systems to smartphones, tablets, and personal computers. In May 2017, Fuchsia was updated with a user interface, along with a developer writing that the project was not a "dumping ground of a dead thing", prompting media speculation about Google's intentions with the operating system, including the possibility of it replacing Android. On July 1, 2019 Google announced the homepage of the project, fuchsia.dev, which provides source code and documentation for the newly announced operating system.[3]""";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,10 +49,10 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
           child: Wrap(
             alignment: WrapAlignment.spaceAround,
             runAlignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: <Widget>[
-              //Text(txt),
               FlatButton(
-                child: Text("FlatButton"),
+                child: Text("System Infomation"),
                 onPressed: () {
                   var bytes = utf8.encode("input");
                   var encoded = sha256.convert(bytes);
@@ -78,8 +74,7 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 child: Text("Windows File Test"),
                 onPressed: () async {
                   print("flatbutton");
-                  var file = File(
-                      "G:\\work\\test1\\build\\windows\\x64\\Debug\\Runner\\test.txt");
+                  var file = File("G:\\work\\test1\\build\\windows\\x64\\Debug\\Runner\\test.txt");
                   if (await file.exists()) {
                     await file.delete();
                   }
@@ -95,8 +90,7 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 child: Text("toListPage"),
                 onPressed: () {
                   print("flatbutton");
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ListPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ListPage()));
                 },
               ),
               RaisedButton(
@@ -121,51 +115,43 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 child: Text("toTestHome"),
                 onPressed: () {
                   print("flatbutton");
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TestHome()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TestHome()));
                 },
               ),
               RaisedButton(
                 child: Text("Get Pref"),
                 onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
                   var val = prefs.getString("key1");
-                  //var pref = await SimplePref.getPref("first.xml");
-                  //var value = pref.getString("test", "AAA");
                   print("value : $val");
                 },
               ),
               RaisedButton(
                 child: Text("Save Pref"),
                 onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                   prefs.setString("key1","this is value");
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setString("key1", "this is value");
                 },
               ),
               RaisedButton(
                 child: Text("gfwlist"),
                 onPressed: () {
                   print("flatbutton");
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => GfwListPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => GfwListPage()));
                 },
               ),
               RaisedButton(
                 child: Text("toThreading"),
                 onPressed: () {
                   print("flatbutton");
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ThreadPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ThreadPage()));
                 },
               ),
               RaisedButton(
                 child: Text("VideoPage"),
                 onPressed: () {
                   print("flatbutton");
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => VideoPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => VideoPage()));
                 },
               ),
               RaisedButton(
@@ -179,16 +165,14 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
               RaisedButton(
                 child: Text("Spider iqiyi"),
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Auth()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Auth()));
                 },
               ),
               RaisedButton(
                 child: Text("ViewPager"),
                 onPressed: () {
                   print("flatbutton");
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Auth()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Auth()));
                 },
               ),
               RaisedButton(
@@ -197,8 +181,7 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   print("flatbutton");
 
                   final String assetName = 'assets/lizard.svg';
-                  var svg =
-                      await DefaultAssetBundle.of(context).load(assetName);
+                  var svg = await DefaultAssetBundle.of(context).load(assetName);
                   var data = svg.buffer.asUint8List();
                   Navigator.push(
                       context,
@@ -210,20 +193,17 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 child: Text("DoH Json Test"),
                 onPressed: () async {
                   print("flatbutton");
-                  var url =
-                      "https://dns.google/resolve?name=twitter.com&type=a&do=1";
+                  var url = "https://dns.google/resolve?name=twitter.com&type=a&do=1";
                   var dio = Dio();
                   dio.options.headers["user-agent"] =
                       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36";
                   dio.options.contentType = "text";
-                  var httpAdapter =
-                      dio.httpClientAdapter as DefaultHttpClientAdapter;
+                  var httpAdapter = dio.httpClientAdapter as DefaultHttpClientAdapter;
                   httpAdapter.onHttpClientCreate = (HttpClient client) {
                     client.findProxy = (url) {
                       return "PROXY localhost:8001;";
                     };
-                    client.badCertificateCallback =
-                        (X509Certificate cert, String host, int port) => true;
+                    client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
                   };
                   Response<String> result = await dio.get(url);
                   var content = result.data;
@@ -241,8 +221,7 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 child: Text("Widgets"),
                 onPressed: () {
                   print("flatbutton");
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => WidgetsPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => WidgetsPage()));
                 },
               ),
               RaisedButton(
@@ -256,9 +235,7 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                 child: Text("to Main"),
                 onPressed: () => {
                   Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
-                      (route) => false)
+                      context, MaterialPageRoute(builder: (context) => MyHomePage()), (route) => false)
                 },
               ),
               RaisedButton(
@@ -285,8 +262,24 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   print("$dt");
                 },
               ),
-              Row(children: [Text("Localization Txt:"),Text(AppLocalizations.of(context).helloWorld)],)
-
+              Text(AppLocalizations.of(context).helloWorld("Localization:")),
+              RaisedButton(
+                child: Text("Desktop MenuBar"),
+                onPressed: () async {
+                  //Share.share("zzzzzzzzzzzzz", subject: "subject");
+                  if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+                    setApplicationMenu([
+                      Submenu(label: "SubMenu1", children: [MenuItem(label: "menuItem1", enabled: false)]),
+                      Submenu(label: "SubMenu2", children: [
+                        MenuItem(label: "menuItem1"),
+                        MenuItem(label: "menuItem2"),
+                        MenuItem(label: "menuItem3")
+                      ]),
+                      Submenu(label: "SubMenu3", children: [MenuItem(label: "menuItem1")]),
+                    ]);
+                  }
+                },
+              ),
             ],
           ),
         ),

@@ -1,8 +1,15 @@
 {
  "@@locale": "en",
- "helloWorld": "Hello World!",
+ "helloWorld": "{parmas} Hello World!",
  "@helloWorld": {
- "description": "The conventional newborn programmer greeting"
+ "description": "The conventional newborn programmer greeting",
+ "placeholders":{
+"parmas": {
+ "type": "String",
+ "example": "Bob"
+ }
+
+ }
  }
 }
 
