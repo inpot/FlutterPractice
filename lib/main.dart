@@ -6,6 +6,7 @@ import 'package:test1/spider.dart';
 import 'package:test1/spiderXh.dart';
 import 'package:test1/splash.dart';
 import 'dart:math' as math;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   // debugRepaintRainbowEnabled = true;
@@ -22,6 +23,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -62,49 +65,49 @@ class _MyHomePageState extends State<MyHomePage> {
   var current = 0;
   var imgs = [
     "20200115163628.jpg",
-"20200115163729.jpg",
-"20200115163739.jpg",
-"20200115163755.jpg",
-"20200115163801.jpg",
-"20200115163807.jpg",
-"20200115163815.jpg",
-"20200116110120.jpg",
-"20200116110201.jpg",
-"20200116110211.jpg",
-"20200116110218.jpg",
-"20200116110238.jpg",
-"20200116110246.jpg",
-"20200116110255.jpg",
-"20200116110303.jpg",
-"20200116110308.jpg",
-"20200116110757.jpg",
-"20200116110815.jpg",
-"20200116110829.jpg",
-"20200116110842.jpg",
-"20200116142851.jpg",
-"20200116142906.jpg",
-"20200116142927.jpg",
-"20200116142938.jpg",
-"20200116142946.jpg",
-"20200116143022.jpg",
-"20200116143148.jpg",
-"20200116143202.jpg",
-"20200116143212.jpg",
-"20200116143254.jpg",
-"20200116143302.jpg",
-"20200116143307.jpg",
-"20200116143314.jpg",
-"20200116143327.jpg",
-"20200116143351.jpg",
-"20200116143401.jpg",
-"20200116143408.jpg",
-"20200116143414.jpg",
-"20200116143420.jpg",
-"20200116143511.jpg",
-"20200116143524.jpg",
-"640.webp",
-"6402.webp",
-"64022.jpg",
+    "20200115163729.jpg",
+    "20200115163739.jpg",
+    "20200115163755.jpg",
+    "20200115163801.jpg",
+    "20200115163807.jpg",
+    "20200115163815.jpg",
+    "20200116110120.jpg",
+    "20200116110201.jpg",
+    "20200116110211.jpg",
+    "20200116110218.jpg",
+    "20200116110238.jpg",
+    "20200116110246.jpg",
+    "20200116110255.jpg",
+    "20200116110303.jpg",
+    "20200116110308.jpg",
+    "20200116110757.jpg",
+    "20200116110815.jpg",
+    "20200116110829.jpg",
+    "20200116110842.jpg",
+    "20200116142851.jpg",
+    "20200116142906.jpg",
+    "20200116142927.jpg",
+    "20200116142938.jpg",
+    "20200116142946.jpg",
+    "20200116143022.jpg",
+    "20200116143148.jpg",
+    "20200116143202.jpg",
+    "20200116143212.jpg",
+    "20200116143254.jpg",
+    "20200116143302.jpg",
+    "20200116143307.jpg",
+    "20200116143314.jpg",
+    "20200116143327.jpg",
+    "20200116143351.jpg",
+    "20200116143401.jpg",
+    "20200116143408.jpg",
+    "20200116143414.jpg",
+    "20200116143420.jpg",
+    "20200116143511.jpg",
+    "20200116143524.jpg",
+    "640.webp",
+    "6402.webp",
+    "64022.jpg",
   ];
 
   void onBottomClick(int position) {
@@ -139,18 +142,19 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             SpiderPage(),
             SpiderXh(),
-            SingleChildScrollView( child: 
-            
-            Wrap(
-                  children:  imgs.map((img) =>
-
-                      ClipOval( 
-                        child: Image.asset("assets/$img", width: 120,height: 120,fit: BoxFit.cover,), 
-                      )
-
-                  ).toList(),
-
-                  ),
+            SingleChildScrollView(
+              child: Wrap(
+                children: imgs
+                    .map((img) => ClipOval(
+                          child: Image.asset(
+                            "assets/$img",
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ))
+                    .toList(),
+              ),
             )
           ],
         ),
@@ -171,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
         // ),
         bottomNavigationBar: BottomAppBar(
-       //   shape: OutterCirclerNoched(),
+          //   shape: OutterCirclerNoched(),
           color: Colors.deepOrangeAccent,
           child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -232,21 +236,21 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  List<Widget> generateImage(){
 
- var result = imgs.map((img) =>
+  List<Widget> generateImage() {
+    var result = imgs
+        .map((img) => ClipOval(
+              child: Image.asset(
+                "assets/$img",
+                width: 120,
+                height: 120,
+                fit: BoxFit.cover,
+              ),
+            ))
+        .toList();
 
-                      ClipOval( 
-                        child: Image.asset("assets/$img", width: 120,height: 120,fit: BoxFit.cover,), 
-                      )
-
-                  ).toList();
-
-
-return result;
+    return result;
   }
-
-
 }
 
 class OutterCirclerNoched extends CircularNotchedRectangle {

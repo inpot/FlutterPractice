@@ -11,12 +11,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test1/auth2.dart';
 import 'package:test1/expensive.dart';
 import 'package:test1/gfwlist.dart';
 import 'package:test1/list.dart';
 import 'package:test1/main.dart';
-import 'package:test1/simple_preference.dart';
 import 'package:test1/thread.dart';
 import 'package:test1/video.dart';
 import 'package:test1/vs.dart';
@@ -24,6 +24,7 @@ import 'package:test1/widgets.dart';
 import 'package:toast/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_size/window_size.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatelessWidget {
   var txt =
@@ -127,16 +128,20 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
               RaisedButton(
                 child: Text("Get Pref"),
                 onPressed: () async {
-                  var pref = await SimplePref.getPref("first.xml");
-                  var value = pref.getString("test", "AAA");
-                  print("value : $value");
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  var val = prefs.getString("key1");
+                  //var pref = await SimplePref.getPref("first.xml");
+                  //var value = pref.getString("test", "AAA");
+                  print("value : $val");
                 },
               ),
               RaisedButton(
                 child: Text("Save Pref"),
                 onPressed: () async {
-                  var pref = await SimplePref.getPref("first.xml");
-                  await pref.putString("test", "success");
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                   prefs.setString("key1","this is value");
                 },
               ),
               RaisedButton(
@@ -280,6 +285,8 @@ The GitHub project suggests Fuchsia can run on many platforms, from embedded sys
                   print("$dt");
                 },
               ),
+              Row(children: [Text("Localization Txt:"),Text(AppLocalizations.of(context).helloWorld)],)
+
             ],
           ),
         ),
