@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class GfwListPage extends StatelessWidget {
   var vm = GfwVM();
@@ -15,103 +16,106 @@ class GfwListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("GfwList")),
-      body: MultiProvider(providers:[
-          ChangeNotifierProvider.value(value: vm)
-
-
-       ], child: _GfwPageBody(vm),
-    ));
+        appBar: AppBar(title: Text("GfwList")),
+        body: MultiProvider(
+          providers: [ChangeNotifierProvider.value(value: vm)],
+          child: _GfwPageBody(vm),
+        ));
   }
 }
 
 class _GfwPageBody extends StatelessWidget {
   GfwVM vm;
-  final RegExp ipRegExp= new RegExp(r"^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$");
-  final RegExp ipsetRegExp= new RegExp(r"^[a-z]{3-10}$");
+  final RegExp ipRegExp =
+      new RegExp(r"^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$");
+  final RegExp ipsetRegExp = new RegExp(r"^[a-z]{3-10}$");
   _GfwPageBody(this.vm);
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("GfwList 2 dnsmasq"), 
+        Text("GfwList 2 dnsmasq"),
         TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "UpString Dns Server port",
-                    hintText: "127.0.0.1@1053",
-                  ),
-                  initialValue: "127.0.0.1@1053",
-                  validator: (value) {
-                    vm.DNSServer = null;
-                    var length = 0;
-                    if (value == null)
-                      length = 0;
-                    else{ 
-                      value = value.trim();
-                      length = value.length;
-                    }
-                    if (value.length < 10) {
-                      return "长度不正确";
-                    }
-                    var strs = value.split("@");
-                    if (strs.length != 2) {
-                      return "格式不正确，请用@作ip和port的分割号";
-                    }
-                    var ipMatch = ipRegExp.hasMatch(strs[1]);
-                    if (!ipMatch) {
-                      return "ip格式不正确";
-                    }
-                    int port = int.parse(strs[2]);
-                    if(port <= 0 || port > 65535){
-                       return "端口号的范围是0到65535"; 
-                    }
-                    vm.DNSServer = value ;
-                    return null;
-                  },
-                ),
-                TextFormField(decoration:InputDecoration(labelText: "ipset Name",hintText: "ipset Name"),initialValue: "gfwlist", validator: (value){ 
-                    var length = 0;
-                    vm.ipsetName = null;
-                    if (value == null)
-                      length = 0;
-                    else{ 
-                      value = value.trim();
-                      length = value.length;
-                    }
-                    if (length > 10 || length < 3) {
-                      return "ipset Name长度应为3-10";
-                    }
+          decoration: InputDecoration(
+            labelText: "UpString Dns Server port",
+            hintText: "127.0.0.1@1053",
+          ),
+          initialValue: "127.0.0.1@1053",
+          validator: (value) {
+            vm.DNSServer = null;
+            var length = 0;
+            if (value == null)
+              length = 0;
+            else {
+              value = value.trim();
+              length = value.length;
+            }
+            if (value.length < 10) {
+              return "长度不正确";
+            }
+            var strs = value.split("@");
+            if (strs.length != 2) {
+              return "格式不正确，请用@作ip和port的分割号";
+            }
+            var ipMatch = ipRegExp.hasMatch(strs[1]);
+            if (!ipMatch) {
+              return "ip格式不正确";
+            }
+            int port = int.parse(strs[2]);
+            if (port <= 0 || port > 65535) {
+              return "端口号的范围是0到65535";
+            }
+            vm.DNSServer = value;
+            return null;
+          },
+        ),
+        TextFormField(
+          decoration: InputDecoration(labelText: "ipset Name", hintText: "ipset Name"),
+          initialValue: "gfwlist",
+          validator: (value) {
+            var length = 0;
+            vm.ipsetName = null;
+            if (value == null)
+              length = 0;
+            else {
+              value = value.trim();
+              length = value.length;
+            }
+            if (length > 10 || length < 3) {
+              return "ipset Name长度应为3-10";
+            }
 
-                    var ipMatch = ipsetRegExp.hasMatch(value);
-                    if (!ipMatch) {
-                      return "ipset应当全小写字母"; 
-                      }
-                      vm.ipsetName = value;
-                   return null;
-
-                },),
-                Consumer(builder: (_,GfwVM vm, widget){ 
-                    return Text("${vm.status}");
-
-                }),
-                RaisedButton(child:Text("2Dnsmasq"), onPressed: ()async{ 
-                  var result = await showSavePanel();
-                  if(result.paths.length >0 ){
-                      vm.savePath = result.paths[0]; 
-                      }
-                  print("${result.paths[0]}");
-                  vm.convert2dnsmasq();
-                }),
-        Text("GfwList 2 dnsmasq") 
-
+            var ipMatch = ipsetRegExp.hasMatch(value);
+            if (!ipMatch) {
+              return "ipset应当全小写字母";
+            }
+            vm.ipsetName = value;
+            return null;
+          },
+        ),
+        Consumer(builder: (_, GfwVM vm, widget) {
+          return Text("${vm.status}");
+        }),
+        RaisedButton(
+            child: Text("2Dnsmasq"),
+            onPressed: () async {
+              var result = await showSavePanel();
+              if (result.paths.length > 0) {
+                vm.savePath = result.paths[0];
+                print("${result.paths[0]}");
+                vm.convert2dnsmasq();
+              }
+              Toast.show("No file choosed!!", context);
+            }),
+        Text("GfwList 2 dnsmasq")
       ],
     );
   }
 }
 
-class GfwVM with ChangeNotifier{
-
+class GfwVM with ChangeNotifier {
   var status = "ready";
   var statusBuilder = StringBuffer("Ready==");
   final SPLASH = "/";
@@ -125,7 +129,7 @@ class GfwVM with ChangeNotifier{
 
   Future convert2dnsmasq() async {
     progress = 0.0;
-    _appendLine("CheckPermission"); 
+    _appendLine("CheckPermission");
     _appendLine("parse success");
     var builder2 = StringBuffer();
     var gfwlistStr = await getGfwlist();
@@ -166,19 +170,18 @@ class GfwVM with ChangeNotifier{
   void _appendLine(String value) {
     statusBuilder.writeln(value);
     _setStatus(statusBuilder.toString());
-  } 
+  }
 }
-
 
 Future<String> getGfwlist() async {
   var dio = Dio();
-                  var httpAdapter = dio.httpClientAdapter as DefaultHttpClientAdapter;
-                  httpAdapter.onHttpClientCreate = (HttpClient client){ 
-                    client.findProxy = (url){
-                        return "PROXY localhost:8001;"; 
-                    };
-                     client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-                  };
+  var httpAdapter = dio.httpClientAdapter as DefaultHttpClientAdapter;
+  httpAdapter.onHttpClientCreate = (HttpClient client) {
+    client.findProxy = (url) {
+      return "PROXY localhost:8001;";
+    };
+    client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  };
   Response<String> response = await dio.get<String>(
       "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt",
       onReceiveProgress: downloadProgress);
@@ -201,8 +204,7 @@ Future<String> getGfwlist() async {
 
 void downloadProgress(int count, int total) {
   var progress = count / total;
-  var downloadStr =
-      "$count/$total ===== ${(progress * 100).toStringAsFixed(1)}%";
+  var downloadStr = "$count/$total ===== ${(progress * 100).toStringAsFixed(1)}%";
   print(downloadStr + "\n");
 }
 
@@ -219,8 +221,8 @@ Future<bool> checkPermission() async {
   permission2.forEach((PermissionGroup key, PermissionStatus value) {
     print("permssion ${key.toString()}");
     if (key.value == PermissionGroup.storage.value) {
-      var granted = (value.value == PermissionStatus.granted.value); 
-    print("granted ${granted}");
+      var granted = (value.value == PermissionStatus.granted.value);
+      print("granted ${granted}");
       if (!granted) {
         denied.write("${key.toString()}  === ${value.toString()}");
       }

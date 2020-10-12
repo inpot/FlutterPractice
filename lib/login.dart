@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:menubar/menubar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test1/auth2.dart';
@@ -280,6 +281,11 @@ class LoginPage extends StatelessWidget {
                   }
                 },
               ),
+              RaisedButton(
+                  child: Text("NavigationRail"),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NavigationH()));
+                  })
             ],
           ),
         ),
@@ -296,4 +302,67 @@ class User {
   String icon;
 
   User(this.name, this.id, this.email, this.addr, this.icon);
+}
+
+class NavigationH extends StatelessWidget {
+  var railVM = NavigationRailVM();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Stack(children: [
+      MultiProvider(
+          providers: [ChangeNotifierProvider.value(value: railVM)],
+          builder: (context, child) {
+            var vm = context.watch<NavigationRailVM>();
+            var rail = NavigationRail(
+              destinations: [
+                NavigationRailDestination(icon: Icon(Icons.ac_unit), label: Text("Destnation0")),
+                NavigationRailDestination(icon: Icon(Icons.dashboard), label: Text("Destnation1")),
+                NavigationRailDestination(icon: Icon(Icons.baby_changing_station), label: Text("Destnation2")),
+                NavigationRailDestination(icon: Icon(Icons.cached), label: Text("Destnation3")),
+              ],
+              selectedIndex: context.watch<NavigationRailVM>().Current,
+              onDestinationSelected: (value) => vm.Current = value,
+            );
+            var body = Row(
+              children: [rail, buildDetail(vm.Current)],
+            );
+
+            return body;
+          }),
+      Container(
+        alignment: Alignment.bottomLeft,
+        margin: EdgeInsets.all(40),
+        child: Material(
+          borderRadius: BorderRadius.circular(8),
+          child: RaisedButton(
+              onPressed: () => print("Click"),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.access_alarms), Text("data")])),
+        ),
+      )
+    ]));
+  }
+
+  Widget buildDetail(int index) {
+    print("buildDetail $index");
+    return Expanded(
+      child: Center(child: Text("This is $index")),
+    );
+  }
+}
+
+class NavigationRailBody extends StatelessElement {
+  NavigationRailBody(StatelessWidget widget) : super(widget);
+}
+
+class NavigationRailVM extends ChangeNotifier {
+  var _current = 0;
+  int get Current {
+    return _current;
+  }
+
+  set Current(int value) {
+    _current = value;
+    notifyListeners();
+  }
 }
