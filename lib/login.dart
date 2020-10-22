@@ -6,6 +6,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import "dart:math" as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -305,48 +306,146 @@ class User {
 }
 
 class NavigationH extends StatelessWidget {
-  var railVM = NavigationRailVM();
+  var railVM = ValueNotifier(0);
+  var isExtended = ValueNotifier(false);
+  AnimationController rotationController;
+  // @override
+  // void initState() {
+  //   rotationController = AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: [
       MultiProvider(
-          providers: [ChangeNotifierProvider.value(value: railVM)],
+          providers: [ChangeNotifierProvider.value(value: isExtended), ChangeNotifierProvider.value(value: railVM)],
           builder: (context, child) {
-            var vm = context.watch<NavigationRailVM>();
-            var rail = NavigationRail(
-              destinations: [
-                NavigationRailDestination(icon: Icon(Icons.ac_unit), label: Text("Destnation0")),
-                NavigationRailDestination(icon: Icon(Icons.dashboard), label: Text("Destnation1")),
-                NavigationRailDestination(icon: Icon(Icons.baby_changing_station), label: Text("Destnation2")),
-                NavigationRailDestination(icon: Icon(Icons.cached), label: Text("Destnation3")),
-              ],
-              selectedIndex: context.watch<NavigationRailVM>().Current,
-              onDestinationSelected: (value) => vm.Current = value,
+            // var vm = context.watch<ValueNotifier<int>>();
+            print("extend out :${isExtended.value}");
+            var left = Consumer2<ValueNotifier<int>, ValueNotifier<bool>>(
+                builder: (context, page, extend, child) => NavigationRail(
+                        destinations: [
+                          NavigationRailDestination(icon: Icon(Icons.ac_unit), label: Text("Destnation0")),
+                          NavigationRailDestination(icon: Icon(Icons.dashboard), label: Text("Destnation1")),
+                          NavigationRailDestination(
+                              icon: Icon(Icons.baby_changing_station), label: Text("Destnation2")),
+                          NavigationRailDestination(icon: Icon(Icons.cached), label: Text("Destnation3")),
+                        ],
+                        selectedIndex: page.value,
+                        onDestinationSelected: (value) => page.value = value,
+                        extended: extend.value,
+                        leading: _NavLead(extend),
+                        trailing: _NavTail(extend)));
+            var right = Consumer<ValueNotifier<int>>(
+              builder: (context, value, child) {
+                print("value changed :${value.value}");
+                return buildDetail(value.value);
+              },
             );
             var body = Row(
-              children: [rail, buildDetail(vm.Current)],
+              children: [left, right],
             );
 
             return body;
           }),
       Container(
-        alignment: Alignment.bottomLeft,
-        margin: EdgeInsets.all(40),
-        child: Material(
-          borderRadius: BorderRadius.circular(8),
-          child: RaisedButton(
-              onPressed: () => print("Click"),
-              child: Row(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.access_alarms), Text("data")])),
-        ),
-      )
+          alignment: Alignment.bottomLeft,
+          margin: EdgeInsets.all(40),
+          child: FloatingActionButton.extended(
+            onPressed: () => Navigator.pop(context),
+            label: Text("Back"),
+            icon: Icon(Icons.arrow_back),
+          ))
     ]));
   }
 
   Widget buildDetail(int index) {
     print("buildDetail $index");
     return Expanded(
-      child: Center(child: Text("This is $index")),
+      child: Stack(children: [
+        Column(
+          children: [
+            Text(
+              "This is $index",
+              style: TextStyle(color: Colors.blue),
+            ),
+            Divider(
+              indent: 20,
+              endIndent: 80,
+            ),
+            Text(
+              "This is $index",
+              style: TextStyle(color: Colors.blue),
+            ),
+            Divider(),
+            Text(
+              "This is $index",
+              style: TextStyle(color: Colors.blue),
+            ),
+            Divider(),
+            Text(
+              "This is $index",
+              style: TextStyle(color: Colors.blue),
+            ),
+          ],
+        ),
+        Center(child: Text("This is $index")),
+      ]),
+    );
+  }
+}
+
+class _NavTail extends StatelessWidget {
+  ValueNotifier<bool> extend;
+  _NavTail(this.extend);
+  @override
+  Widget build(BuildContext context) {
+    var animate = NavigationRail.extendedAnimation(context);
+    return AnimatedBuilder(
+      animation: animate,
+      builder: (context, child) {
+        return Visibility(
+          visible: animate.value > 0,
+          child: Opacity(
+            opacity: animate.value,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                RaisedButton(onPressed: () => print("click"), child: Text("folder1")),
+                Divider(),
+                Text("folder1"),
+                Divider(),
+                Text("folder1"),
+                Divider(),
+                Text("folder1"),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _NavLead extends StatelessWidget {
+  final ValueNotifier<bool> extend;
+  _NavLead(this.extend);
+  @override
+  Widget build(BuildContext context) {
+    var animate = NavigationRail.extendedAnimation(context);
+    return AnimatedBuilder(
+      animation: animate,
+      builder: (context, child) {
+        return Transform.rotate(
+          angle: animate.value * math.pi,
+          child: IconButton(
+            icon: Icon(Icons.arrow_left),
+            onPressed: () => extend.value = !extend.value,
+          ),
+        );
+      },
     );
   }
 }

@@ -1,10 +1,12 @@
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ThreadPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    init();
     return Scaffold(
       appBar: AppBar(
         title: Text("Theading"),
@@ -12,37 +14,37 @@ class ThreadPage extends StatelessWidget {
       body: Text("BodyText"),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.dashboard),
-        onPressed: threadTest,
+        onPressed: sendMsg,
       ),
     );
   }
 
-  void threadTest() async {
+  void sendMsg() {
+    sendPort.send("send from onPressed");
+  }
+
+  SendPort sendPort;
+
+  var receivePort = ReceivePort();
+  void init() async {
     print("thread test");
-    var receivePort = ReceivePort();
     Isolate.spawn(dataLoader, receivePort.sendPort);
-    SendPort sendPort = await receivePort.first;
-    sendPort.send(["message from thread Test", receivePort.sendPort]);
-    await for (var msg in receivePort) {
-    
-       print("msg ${msg.toString()}");
-    
-    }
+    receivePort.listen((message) {
+      if (message is SendPort) {
+        sendPort = message;
+      }
+      print("Main Got Message: $message");
+    });
   }
 
   static void dataLoader(SendPort sendPort) async {
     print(" dataLoader: ======");
     var receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
-
+    //receivePort.listen((message) => print("Got Message"));
     await for (var msg in receivePort) {
-      String data = msg[0];
-      SendPort sendPort = msg[1];
-      print("msg $data");
-      await Future.delayed(Duration(seconds: 2), () {
-        sendPort.send("this message from Isolate");
-      }); 
-      print("completed");
+      print("loader Got msg:$msg");
+      sendPort.send("Reply for Msg: $msg");
     }
   }
 }
