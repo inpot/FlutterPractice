@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test1/auth2.dart';
+import 'package:test1/custompaint.dart';
 import 'package:test1/expensive.dart';
 import 'package:test1/gfwlist.dart';
 import 'package:test1/list.dart';
@@ -241,11 +242,44 @@ class LoginPage extends StatelessWidget {
                 },
               ),
               RaisedButton(
+                child: Text("Custom Clock"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      var timeTick = Stream.periodic(Duration(seconds: 1));
+                      return SafeArea(
+                        child: Container(
+                          color: Colors.white,
+                          child: StreamBuilder(
+                              stream: timeTick,
+                              builder: (context, snapshot) {
+                                var dt = DateTime.now();
+                                return CustomPaint(
+                                  painter: ClockWidget(dt),
+                                );
+                              }),
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
+              RaisedButton(
                 child: Text("Expensive Paint"),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => ExpensivePage()),
+                  );
+                },
+              ),
+              RaisedButton(
+                child: Text("Custom PaintTo"),
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CustomPaintPage()),
                   );
                 },
               ),
