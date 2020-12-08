@@ -57,8 +57,9 @@ class __PageSTFState extends State<_PageSTF> {
 class ClockWidget extends CustomPainter {
   var pen = Paint();
   DateTime date;
+  var radius = 120.0;
   ClockWidget(this.date) {
-    _generateLablePoint(90, Offset.zero);
+    _generateLablePoint(radius - 30, Offset.zero);
   }
   @override
   void paint(Canvas canvas, Size size) {
@@ -97,7 +98,7 @@ class ClockWidget extends CustomPainter {
   }
 
   List<Offset> lablePoints = List();
-  void _generateLablePoint(int radius, Offset center) {
+  void _generateLablePoint(double radius, Offset center) {
     var count = 12;
     var step = 2 * math.pi / count;
     for (int i = 0; i < count; i++) {
@@ -112,33 +113,21 @@ class ClockWidget extends CustomPainter {
     canvas.save();
     var center = Offset(size.width / 2, size.height / 2);
     canvas.translate(center.dx, center.dy);
-    canvas.drawCircle(Offset.zero, 120, pen);
+    canvas.drawCircle(Offset.zero, radius, pen);
     pen.style = PaintingStyle.stroke;
     pen.strokeWidth = 4;
     pen.color = Colors.indigo;
-    canvas.drawCircle(Offset.zero, 120, pen);
+    canvas.drawCircle(Offset.zero, radius, pen);
     var count2 = 60;
     var step2 = 2 * math.pi / 60;
     pen.strokeCap = StrokeCap.butt;
-    var index = 0;
+    // var LenghHour = 18;
+    // var LenghMinute = 14;
     for (int i = 0; i < count2; i++) {
       if (i % 5 == 0) {
-        pen.color = Colors.black54;
+        pen.color = Colors.black;
         pen.strokeWidth = 4;
         canvas.drawLine(Offset(0, -100), Offset(0, -118), pen);
-        // var paragBuilder = ParagraphBuilder(ParagraphStyle(
-        //   textAlign: TextAlign.center,
-        //   fontSize: 12,
-        //   fontStyle: FontStyle.normal,
-        //   textDirection: ui.TextDirection.ltr,
-        // ))
-        //   ..pushStyle(ui.TextStyle(color: Colors.black))
-        //   ..addText("$index")
-        //   ..pop();
-        // var para = paragBuilder.build();
-        // para.layout(ParagraphConstraints(width: 20));
-        // canvas.drawParagraph(para, Offset(-10, -100));
-        index++;
       } else {
         pen.color = Colors.black54;
         pen.strokeWidth = 2;
