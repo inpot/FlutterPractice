@@ -57,15 +57,55 @@ class __PageSTFState extends State<_PageSTF> {
 class ClockWidget extends CustomPainter {
   var pen = Paint();
   DateTime date;
-  ClockWidget(this.date);
+  ClockWidget(this.date) {
+    _generateLablePoint(90, Offset.zero);
+  }
   @override
   void paint(Canvas canvas, Size size) {
     pen.color = Colors.black;
-    pen.blendMode = BlendMode.srcOver;
+    pen.isAntiAlias = true;
     canvas.drawColor(Colors.white, BlendMode.color);
     pen.color = Colors.amber;
     _drawBg(canvas, size);
+    _drawNumberic(canvas, size);
     _drawHMS(canvas, size);
+  }
+
+  void _drawNumberic(Canvas canvas, Size size) {
+    canvas.save();
+    var center = Offset(size.width / 2, size.height / 2);
+    canvas.translate(center.dx, center.dy);
+    var index = 3;
+    lablePoints.forEach((point) {
+      var lable = index > 12 ? index - 12 : index;
+      var paragBuilder = ParagraphBuilder(ParagraphStyle(
+        textAlign: TextAlign.center,
+        fontSize: 12,
+        fontStyle: FontStyle.normal,
+        textDirection: ui.TextDirection.ltr,
+      ))
+        ..pushStyle(ui.TextStyle(color: Colors.black))
+        ..addText("$lable")
+        ..pop();
+      var para = paragBuilder.build();
+      para.layout(ParagraphConstraints(width: 14));
+      var offset = Offset(point.dx - para.height / 2, point.dy - para.width / 2);
+      canvas.drawParagraph(para, offset);
+      index++;
+    });
+    canvas.restore();
+  }
+
+  List<Offset> lablePoints = List();
+  void _generateLablePoint(int radius, Offset center) {
+    var count = 12;
+    var step = 2 * math.pi / count;
+    for (int i = 0; i < count; i++) {
+      var dx = center.dx + radius * math.cos(i * step);
+      var dy = center.dx + radius * math.sin(i * step);
+      var point = Offset(dx, dy);
+      lablePoints.add(point);
+    }
   }
 
   void _drawBg(Canvas canvas, Size size) {
@@ -80,25 +120,24 @@ class ClockWidget extends CustomPainter {
     var count2 = 60;
     var step2 = 2 * math.pi / 60;
     pen.strokeCap = StrokeCap.butt;
-    //canvas.save();
     var index = 0;
     for (int i = 0; i < count2; i++) {
       if (i % 5 == 0) {
         pen.color = Colors.black54;
         pen.strokeWidth = 4;
         canvas.drawLine(Offset(0, -100), Offset(0, -118), pen);
-        var paragBuilder = ParagraphBuilder(ParagraphStyle(
-          textAlign: TextAlign.center,
-          fontSize: 12,
-          fontStyle: FontStyle.normal,
-          textDirection: ui.TextDirection.ltr,
-        ))
-          ..pushStyle(ui.TextStyle(color: Colors.black))
-          ..addText("$index")
-          ..pop();
-        var para = paragBuilder.build();
-        para.layout(ParagraphConstraints(width: 20));
-        canvas.drawParagraph(para, Offset(-10, -100));
+        // var paragBuilder = ParagraphBuilder(ParagraphStyle(
+        //   textAlign: TextAlign.center,
+        //   fontSize: 12,
+        //   fontStyle: FontStyle.normal,
+        //   textDirection: ui.TextDirection.ltr,
+        // ))
+        //   ..pushStyle(ui.TextStyle(color: Colors.black))
+        //   ..addText("$index")
+        //   ..pop();
+        // var para = paragBuilder.build();
+        // para.layout(ParagraphConstraints(width: 20));
+        // canvas.drawParagraph(para, Offset(-10, -100));
         index++;
       } else {
         pen.color = Colors.black54;
@@ -186,6 +225,7 @@ class _Page extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     pen.color = Colors.black;
+    pen.isAntiAlias = true;
     pen.blendMode = BlendMode.srcOver;
     canvas.drawColor(Colors.white, BlendMode.color);
 
