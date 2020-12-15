@@ -16,11 +16,13 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test1/auth2.dart';
+import 'package:test1/clock.dart';
 import 'package:test1/custompaint.dart';
 import 'package:test1/expensive.dart';
 import 'package:test1/gfwlist.dart';
 import 'package:test1/list.dart';
 import 'package:test1/main.dart';
+import 'package:test1/picman.dart';
 import 'package:test1/thread.dart';
 import 'package:test1/video.dart';
 import 'package:test1/vs.dart';
@@ -49,7 +51,8 @@ class LoginPage extends StatelessWidget {
           end: Alignment.bottomRight,
         )),
         child: SingleChildScrollView(
-          child: Wrap(
+            child: Column(children: [
+          Wrap(
             alignment: WrapAlignment.spaceAround,
             runAlignment: WrapAlignment.start,
             crossAxisAlignment: WrapCrossAlignment.center,
@@ -242,48 +245,6 @@ class LoginPage extends StatelessWidget {
                 },
               ),
               RaisedButton(
-                child: Text("Custom Clock"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      var timeTick = Stream.periodic(Duration(seconds: 1));
-                      return SafeArea(
-                        child: Container(
-                          color: Colors.white,
-                          child: StreamBuilder(
-                              stream: timeTick,
-                              builder: (context, snapshot) {
-                                var dt = DateTime.now();
-                                return CustomPaint(
-                                  painter: ClockWidget(dt),
-                                );
-                              }),
-                        ),
-                      );
-                    }),
-                  );
-                },
-              ),
-              RaisedButton(
-                child: Text("Expensive Paint"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ExpensivePage()),
-                  );
-                },
-              ),
-              RaisedButton(
-                child: Text("Custom PaintTo"),
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CustomPaintPage()),
-                  );
-                },
-              ),
-              RaisedButton(
                 child: Text("Share To"),
                 onPressed: () async {
                   Share.share("zzzzzzzzzzzzz", subject: "subject");
@@ -323,7 +284,61 @@ class LoginPage extends StatelessWidget {
                   })
             ],
           ),
-        ),
+          Text(
+            "CustomPainter",
+            style: TextStyle(color: Colors.white),
+          ),
+          Wrap(
+            children: [
+              RaisedButton(
+                child: Text("Expensive Paint"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ExpensivePage()),
+                  );
+                },
+              ),
+              RaisedButton(
+                child: Text("Custom PaintTo"),
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CustomPaintPage()),
+                  );
+                },
+              ),
+              RaisedButton(
+                child: Text("Custom Clock"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      //var timeTick = Stream.periodic(Duration(seconds: 1));
+                      return SafeArea(
+                          child: Container(
+                        color: Colors.white,
+                        child: ClockWidget(),
+                      ));
+                    }),
+                  );
+                },
+              ),
+              RaisedButton(
+                child: Text("Gesture"),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => GesturePage()));
+                },
+              ),
+              RaisedButton(
+                child: Text("PicMan"),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PicmanPage()));
+                },
+              ),
+            ],
+          )
+        ])),
       ),
     );
   }
