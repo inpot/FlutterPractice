@@ -59,7 +59,7 @@ class LoginPage extends StatelessWidget {
             children: <Widget>[
               FlatButton(
                 child: Text("System Infomation"),
-                onPressed: () {
+                onPressed: () async {
                   var bytes = utf8.encode("input");
                   var encoded = sha256.convert(bytes);
                   print("encode : $encoded");
@@ -96,6 +96,8 @@ class LoginPage extends StatelessWidget {
                 child: Text("toListPage"),
                 onPressed: () {
                   print("flatbutton");
+                  var release = kReleaseMode;
+                  print("isRlease $release");
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ListPage()));
                 },
               ),
@@ -328,6 +330,12 @@ class LoginPage extends StatelessWidget {
                 child: Text("Gesture"),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => GesturePage()));
+                },
+              ),
+              RaisedButton(
+                child: Text("RulerPage"),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => RulerPage()));
                 },
               ),
               RaisedButton(

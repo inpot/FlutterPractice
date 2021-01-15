@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'dart:ui';
+import 'dart:ui' as ui;
 
 class GesturePage extends StatelessWidget {
   @override
@@ -7,6 +9,93 @@ class GesturePage extends StatelessWidget {
     return SafeArea(
       child: GestureT(),
     );
+  }
+}
+
+class RulerPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        child: RulerWidget(),
+        color: Colors.white,
+      ),
+    );
+  }
+}
+
+class RulerWidget extends StatefulWidget {
+  @override
+  _RulerWidgetState createState() => _RulerWidgetState();
+}
+
+class _RulerWidgetState extends State<RulerWidget> {
+  ValueNotifier point = ValueNotifier(Offset.zero);
+  Offset downP = null;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        child: CustomPaint(
+          painter: RulerPainter(point),
+        ),
+        onPanDown: (details) {
+          if (downP == null) downP = details.localPosition;
+        },
+        onPanUpdate: (details) =>
+            point.value = Offset(details.localPosition.dx - downP.dx, downP.dy + details.localPosition.dy));
+  }
+}
+
+class RulerPainter extends CustomPainter {
+  var padding = 16.0;
+  var length = 60.0;
+  var max = 100.0;
+  var min = 0;
+  var pen = Paint();
+  ValueNotifier pointer;
+  RulerPainter(this.pointer) : super(repaint: pointer);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    print("offset ${pointer.value}");
+    var dx = padding + pointer.value.dx;
+    var maxDx = 520;
+    pen.color = Colors.black;
+
+    var dy = padding;
+    for (int i = min; i <= max; i++) {
+      if (dx > maxDx) {
+        break;
+      }
+      if (i % 10 == 0) {
+        pen.strokeWidth = 4;
+        canvas.drawLine(Offset(dx, dy), Offset(dx, dy + length), pen);
+        var paragBuilder = ParagraphBuilder(ParagraphStyle(
+          textAlign: TextAlign.center,
+          fontSize: 12,
+          fontStyle: FontStyle.normal,
+          textDirection: ui.TextDirection.ltr,
+        ))
+          ..pushStyle(ui.TextStyle(color: Colors.black))
+          ..addText("${i}")
+          ..pop();
+        var parag = paragBuilder.build();
+        parag.layout(ui.ParagraphConstraints(width: 30));
+        canvas.drawParagraph(
+          parag,
+          Offset(dx - parag.width / 2, dy + length + 10),
+        );
+      } else {
+        pen.strokeWidth = 2;
+        canvas.drawLine(Offset(dx, dy), Offset(dx, dy + length - 10), pen);
+      }
+      dx += 10;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant RulerPainter oldDelegate) {
+    return pointer.value.dx != oldDelegate.pointer.value.dx || pointer.value.dy != oldDelegate.pointer.value.dy;
   }
 }
 
